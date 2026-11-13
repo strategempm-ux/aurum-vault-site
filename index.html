@@ -1,0 +1,1617 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E0D0B">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230E0D0B' stroke='%23C5A059' stroke-width='3'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-style='italic' font-size='28' fill='%23C5A059' text-anchor='middle'%3EAu%3C/text%3E%3C/svg%3E">
+<meta property="og:title" content="Aurum Vault">
+<meta property="og:description" content="The essential tool for precious metal investors, collectors and stackers, on phone, tablet and desktop.">
+<meta property="og:url" content="https://aurumvault.info/">
+<meta property="og:image" content="https://aurumvault.info/shots/desktop-vault.webp">
+<title>Aurum Vault</title>
+<meta name="description" content="Aurum Vault tracks your gold, silver, platinum and palladium at live spot prices on desktop, iPad and iPhone.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Roboto:wght@400;500;700&display=swap">
+<style>
+/* Layout: a bullion-desk page. Ticker tape, then a headline over a three-device bench,
+   then a ledger of tools. Each device opens its own tour: the device on the left with a
+   working menu, a description of the open screen on the right. Dark only, like the app. */
+:root {
+  --ink: #0E0D0B;        /* page ground, warm near-black */
+  --ink-2: #16140F;      /* raised surfaces */
+  --ink-3: #1F1C15;      /* device screens */
+  --ink-4: #191710;      /* cards inside device screens */
+  --line: #2C281E;       /* rules */
+  --gold: #C5A059;       /* the app's accent */
+  --gold-hi: #E6CC8F;
+  --text: #EDE7D9;
+  --muted: #9D9584;
+  --silver: #B0BEC5;
+  --platinum: #90CAF9;
+  --palladium: #CE93D8;
+  --copper: #D08A5E;
+  --up: #7FC79A;
+  --down: #E07A6E;
+  --bezel: #050504;
+  --bezel-edge: #3a352d;
+
+  --f-display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --f-body: "Hanken Grotesk", "Segoe UI", system-ui, sans-serif;
+  --f-data: "IBM Plex Mono", ui-monospace, "SF Mono", Consolas, monospace;
+
+  --step--1: clamp(0.8rem, 0.78rem + 0.1vw, 0.86rem);
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
+  --step-1: clamp(1.2rem, 1.1rem + 0.5vw, 1.45rem);
+  --step-2: clamp(1.6rem, 1.3rem + 1.4vw, 2.3rem);
+  --step-3: clamp(2.4rem, 1.6rem + 3.8vw, 4.9rem);
+
+  --wrap: 1180px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--f-body);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 2px; }
+.wrap {
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { text-wrap: balance; margin: 0; font-weight: 500; }
+p { margin: 0; }
+.eyebrow {
+  font-family: var(--f-data);
+  font-size: var(--step--1);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ── Ticker tape ─────────────────────────────── */
+.tape {
+  border-bottom: 1px solid var(--line);
+  background: #0F0F0F;
+  font-family: Roboto, "Segoe UI", system-ui, sans-serif;
+  font-size: 0.78rem;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+.tape-track { display: inline-flex; animation: tape 48s linear infinite; }
+.tape-set { display: inline-flex; align-items: center; padding: 0.6rem 0; }
+.tape-set span { display: inline-flex; align-items: center; color: #FFFFFF; font-weight: 400; padding: 0 1.4rem; }
+.tape-set span::after { content: ""; width: 1px; height: 0.95em; background: rgba(255,255,255,.12); margin-left: 1.4rem; margin-right: -1.4rem; }
+.tape-set span b { color: #C5A059; font-weight: 700; letter-spacing: 0.06em; margin-right: 0.65em; }
+.tape-note {
+  position: absolute; right: 0; top: 0; bottom: 0;
+  display: flex; align-items: center;
+  padding-left: 2.5rem;
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: linear-gradient(90deg, transparent, #0F0F0F 35%);
+  color: var(--muted); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase;
+}
+@keyframes tape { to { transform: translateX(-50%); } }
+
+/* ── Nav ─────────────────────────────────────── */
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem 1.4rem; padding-block: 1.2rem; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; }
+.brand-mark {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1.5px solid var(--gold);
+  display: grid; place-items: center;
+  font-family: var(--f-display); font-style: italic; font-size: 1rem; color: var(--gold);
+  box-shadow: inset 0 0 0 3px var(--ink), inset 0 0 0 4px rgba(197,160,89,.45);
+}
+.brand-name { font-family: var(--f-display); font-size: 1.25rem; letter-spacing: 0.02em; }
+.nav-links { display: flex; gap: 1.6rem; font-size: 0.92rem; color: var(--muted); align-items: center; }
+.nav-links a { text-decoration: none; padding-block: 0.2rem; border-bottom: 1px solid transparent; }
+.nav-links a:hover { color: var(--text); }
+.nav-links a[aria-current="page"] { color: var(--gold); border-bottom-color: var(--gold); }
+.nav-links .sep { width: 1px; height: 1rem; background: var(--line); }
+@media (max-width: 760px) {
+  .nav-links { order: 3; width: 100%; gap: 1.2rem; overflow-x: auto; scrollbar-width: none; padding-bottom: 0.2rem; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links .hide-sm { display: none; }
+}
+
+/* ── Buttons ─────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.8rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 600; font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.btn svg { width: 18px; height: 18px; flex: none; }
+.btn-gold { background: var(--gold); color: var(--ink); }
+.btn-gold:hover { background: var(--gold-hi); }
+.btn-line { border-color: var(--line); color: var(--text); background: transparent; }
+.btn-line:hover { border-color: var(--gold); color: var(--gold-hi); }
+.btn-sm { padding: 0.5rem 1rem; font-size: 0.85rem; }
+.link-arrow { color: var(--gold); text-decoration: none; font-weight: 600; font-size: 0.92rem; }
+.link-arrow:hover { color: var(--gold-hi); }
+
+/* ── Hero ────────────────────────────────────── */
+.hero { padding-block: clamp(2rem, 5vw, 4.5rem) 0; }
+.hero-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: end;
+}
+.hero h1 {
+  font-family: var(--f-display);
+  font-size: var(--step-3);
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  font-weight: 400;
+}
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero-copy { display: grid; gap: 1.4rem; max-width: 34rem; }
+.hero-copy p { color: var(--muted); font-size: var(--step-1); line-height: 1.5; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+@media (max-width: 860px) { .hero-head { grid-template-columns: minmax(0, 1fr); align-items: start; } }
+
+/* ── Device frames (shared by the hero bench and the tours) ── */
+.screen {
+  container-type: inline-size;
+  background: var(--ink-3);
+  overflow: hidden;
+  position: relative;
+  color: var(--text);
+  font-family: var(--f-body);
+}
+.f-desk { container-type: inline-size; }
+.f-desk .bezel { background: var(--bezel); border: 1px solid #34302a; border-radius: 1.2cqw 1.2cqw 0.5cqw 0.5cqw; padding: 1.1%; }
+.f-desk .screen { aspect-ratio: 16 / 10; border-radius: 0.4cqw; }
+.f-desk .neck { width: 14%; height: 3.4cqw; margin-inline: auto; background: linear-gradient(#2a2620, #15130f); clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%); }
+.f-desk .foot { width: 26%; height: 0.9cqw; margin-inline: auto; background: #2a2620; border-radius: 0.5cqw 0.5cqw 0.2cqw 0.2cqw; }
+.f-pad { container-type: inline-size; }
+.f-pad .bezel { background: var(--bezel); border: 1px solid var(--bezel-edge); border-radius: 4.2cqw; padding: 3.2%; box-shadow: 0 2.4cqw 6cqw rgba(0,0,0,.6); }
+.f-pad .screen { aspect-ratio: 4 / 3; border-radius: 1.8cqw; }
+.f-phone { container-type: inline-size; }
+.f-phone .bezel { background: var(--bezel); border: 1px solid var(--bezel-edge); border-radius: 15cqw; padding: 4.5%; box-shadow: 0 5cqw 12cqw rgba(0,0,0,.65); }
+.f-phone .screen { aspect-ratio: 9 / 19.5; border-radius: 11cqw; }
+.f-phone .island { position: absolute; top: 2.6%; left: 50%; transform: translateX(-50%); width: 30%; height: 3.4%; background: #000; border-radius: 99px; z-index: 5; }
+
+/* ── Hero bench ──────────────────────────────── */
+.bench { margin-top: clamp(2.5rem, 6vw, 4.5rem); position: relative; }
+.bench::before {
+  content: ""; position: absolute; inset: 18% 6% -4% 6%;
+  background: radial-gradient(ellipse at 50% 60%, rgba(197,160,89,.16), transparent 65%);
+  pointer-events: none;
+}
+.scene { position: relative; width: 100%; max-width: 100%; aspect-ratio: 16 / 9.4; }
+.dev { position: absolute; display: block; text-decoration: none; transition: transform .3s cubic-bezier(.2,.7,.2,1); }
+.dev:hover { transform: translateY(-6px); }
+.dev .tag {
+  position: absolute; left: 50%; bottom: -0.2rem; transform: translate(-50%, 100%);
+  font-family: var(--f-data); font-size: 0.72rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--gold); opacity: 0; transition: opacity .2s; white-space: nowrap;
+}
+.dev:hover .tag, .dev:focus-visible .tag { opacity: 1; }
+.dev-desk { left: 11%; top: 0; width: 76%; }
+.dev-pad { left: 0; bottom: 3%; width: 39%; }
+.dev-phone { right: 1.5%; bottom: 0; width: 17.5%; }
+
+/* hero mock UI (static) */
+.m-gold { color: var(--gold); }
+.m-num { font-family: var(--f-data); font-variant-numeric: tabular-nums; }
+.m-dot { display: inline-block; border-radius: 50%; flex: none; width: 0.7em; height: 0.7em; }
+
+.ui-desk { display: grid; grid-template-columns: 22% 1fr; height: 100%; font-size: 1.15cqw; }
+.ui-side { background: #12110D; border-right: 1px solid var(--line); padding: 2.2cqw 1.6cqw; display: grid; align-content: start; gap: 1cqw; }
+.ui-side .logo { font-family: var(--f-display); font-size: 1.7cqw; color: var(--gold); margin-bottom: 1.4cqw; letter-spacing: .04em; }
+.ui-side span { color: var(--muted); display: flex; align-items: center; gap: 0.8cqw; padding: 0.55cqw 0.8cqw; border-radius: 0.5cqw; }
+.ui-side span i { width: 0.9cqw; height: 0.9cqw; border: 1px solid currentColor; border-radius: 0.2cqw; flex: none; }
+.ui-side span.on { color: var(--gold); background: rgba(197,160,89,.1); }
+.ui-main { padding: 2.2cqw 2.6cqw; display: grid; grid-template-rows: auto auto 1fr auto; gap: 1.6cqw; min-width: 0; }
+.ui-top { display: flex; justify-content: space-between; align-items: center; }
+.ui-top .t { letter-spacing: .2em; font-size: 1.05cqw; color: var(--gold); }
+.ui-pill { border: 1px solid var(--line); border-radius: 99px; padding: 0.35cqw 1cqw; color: var(--muted); font-size: 0.95cqw; }
+.ui-total .k { font-size: 0.95cqw; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+.ui-total .v { font-family: var(--f-display); font-size: 4.4cqw; line-height: 1.05; }
+.ui-total .d { font-size: 1.1cqw; color: var(--up); }
+.ui-chart { background: var(--ink-4); border: 1px solid var(--line); border-radius: 0.8cqw; position: relative; min-height: 0; }
+.ui-chart svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ui-rows { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 1cqw; }
+.ui-rows div { background: var(--ink-4); border: 1px solid var(--line); border-radius: 0.7cqw; padding: 1cqw 1.2cqw; display: grid; gap: 0.2cqw; }
+.ui-rows .n { display: flex; align-items: center; gap: 0.6cqw; font-size: 1cqw; letter-spacing: .1em; color: var(--muted); }
+.ui-rows .q { font-size: 1.6cqw; }
+.ui-rows .s { font-size: 0.95cqw; color: var(--muted); }
+
+.ui-pad { height: 100%; padding: 4.5cqw 4.5cqw 3.5cqw; display: grid; grid-template-rows: auto auto auto 1fr; gap: 3cqw; font-size: 2.4cqw; }
+.ui-pad .t { text-align: center; letter-spacing: .2em; font-size: 2.2cqw; color: var(--gold); }
+.ui-pad .alloc { display: flex; height: 1.6cqw; border-radius: 99px; overflow: hidden; gap: 0.4cqw; }
+.ui-pad .legend { display: flex; flex-wrap: wrap; gap: 1.4cqw 3cqw; font-size: 2cqw; color: var(--muted); }
+.ui-pad .legend span { display: flex; align-items: center; gap: 1cqw; }
+.ui-pad ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5cqw; align-content: start; }
+.ui-pad li { display: grid; grid-template-columns: 6.5cqw 1fr auto; align-items: center; gap: 2.4cqw; background: var(--ink-4); border: 1px solid var(--line); border-radius: 1.6cqw; padding: 1.8cqw 2.4cqw; }
+.ui-pad li .nm { font-weight: 600; font-size: 2.3cqw; }
+.ui-pad li .sb { font-size: 1.9cqw; color: var(--muted); }
+.ui-pad li .vl { text-align: right; font-size: 2.3cqw; }
+.coin { width: 6.5cqw; height: 6.5cqw; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #F4DFA8, #C5A059 45%, #7A5F2C); box-shadow: inset 0 0 0 0.5cqw rgba(0,0,0,.18); }
+.coin.bar { border-radius: 1cqw; height: 4.2cqw; background: linear-gradient(135deg, #F0D9A0, #C5A059 50%, #8C6E34); }
+
+.ui-phone { height: 100%; padding: 22cqw 7cqw 0; display: grid; grid-template-rows: auto auto 1fr auto; gap: 6cqw; font-size: 5cqw; }
+.ui-phone .k { font-size: 4.2cqw; letter-spacing: .16em; color: var(--muted); text-align: center; }
+.ui-phone .v { font-family: var(--f-display); font-size: 12cqw; text-align: center; line-height: 1; }
+.ui-phone .d { font-size: 4.6cqw; color: var(--up); text-align: center; margin-top: 2cqw; }
+.ui-phone svg { width: 100%; height: 22cqw; display: block; }
+.ui-phone ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 3.2cqw; align-content: start; }
+.ui-phone li { display: flex; align-items: center; gap: 3cqw; background: var(--ink-4); border: 1px solid var(--line); border-radius: 4cqw; padding: 3.6cqw 4cqw; }
+.ui-phone li .m-dot { width: 3.4cqw; height: 3.4cqw; }
+.ui-phone li .nm { flex: 1; font-size: 4.4cqw; letter-spacing: .08em; }
+.ui-phone li .vl { font-size: 4.6cqw; }
+.ui-phone .bn { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); padding: 3.6cqw 0 9cqw; background: #12110D; margin-inline: -7cqw; }
+.ui-phone .bn span { display: grid; justify-items: center; gap: 1.4cqw; font-size: 3.2cqw; color: var(--muted); }
+.ui-phone .bn span i { width: 5.4cqw; height: 5.4cqw; border: 1.5px solid currentColor; border-radius: 1.4cqw; }
+.ui-phone .bn span.on { color: var(--gold); }
+
+@media (max-width: 600px) {
+  .scene { aspect-ratio: 4 / 3.6; }
+  .dev-desk { left: 0; width: 100%; }
+  .dev-pad { width: 56%; bottom: 0; left: 0; }
+  .dev-phone { width: 26%; }
+}
+
+.bench-labels {
+  display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem;
+  border-top: 1px solid var(--line);
+  margin-top: clamp(1.6rem, 3vw, 2.4rem);
+  padding-top: 1.1rem;
+}
+.bench-labels a { display: grid; gap: 0.15rem; min-width: 0; text-decoration: none; }
+.bench-labels b { font-weight: 600; font-size: 0.95rem; }
+.bench-labels b span { color: var(--gold); transition: margin .2s; margin-left: 0.3em; }
+.bench-labels a:hover b span { margin-left: 0.6em; }
+.bench-labels .s { color: var(--muted); font-size: var(--step--1); }
+@media (max-width: 600px) { .bench-labels { grid-template-columns: minmax(0,1fr); } }
+
+/* ── Assay strip ─────────────────────────────── */
+.assay { padding-block: clamp(3.5rem, 7vw, 6rem) 0; }
+.marks { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: clamp(0.8rem, 2vw, 1.6rem); }
+.mark {
+  border: 1px solid var(--gold);
+  border-radius: 0.6rem 0.6rem 2.2rem 2.2rem / 0.6rem 0.6rem 1.4rem 1.4rem;
+  padding: 1.3rem 1rem 1.6rem;
+  text-align: center;
+  display: grid; gap: 0.35rem;
+  position: relative;
+}
+.mark::after { content: ""; position: absolute; inset: 5px; border: 1px solid rgba(197,160,89,.28); border-radius: inherit; pointer-events: none; }
+.mark .v { font-family: var(--f-display); font-size: var(--step-2); line-height: 1; color: var(--gold-hi); font-variant-numeric: lining-nums tabular-nums; }
+.mark .k { font-size: var(--step--1); color: var(--muted); line-height: 1.4; }
+@media (max-width: 760px) { .marks { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+
+/* ── Section scaffolding ─────────────────────── */
+.section { padding-block: clamp(4rem, 9vw, 7.5rem) 0; }
+.sec-head { display: grid; gap: 1rem; max-width: 46rem; margin-bottom: clamp(2rem, 4vw, 3.2rem); }
+.sec-head h2 { font-family: var(--f-display); font-size: var(--step-2); line-height: 1.1; font-weight: 400; }
+.sec-head h2 em { color: var(--gold); }
+.sec-head p { color: var(--muted); max-width: 40rem; }
+
+/* ── Vault feature ───────────────────────────── */
+.split { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+@media (max-width: 860px) { .split { grid-template-columns: minmax(0,1fr); } }
+.drill { display: grid; border-top: 1px solid var(--line); margin: 0; padding: 0; }
+.drill li { list-style: none; display: grid; grid-template-columns: 6.5rem minmax(0,1fr); gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+.drill .lvl { font-family: var(--f-data); font-size: 0.75rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); padding-top: 0.2rem; }
+.drill .tx { color: var(--muted); }
+.drill .tx b { color: var(--text); font-weight: 600; }
+.holding-card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 1rem; padding: clamp(1.2rem, 3vw, 2rem); display: grid; gap: 1.2rem; font-variant-numeric: tabular-nums; }
+.hc-top { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+.hc-top .t { font-family: var(--f-data); font-size: 0.75rem; letter-spacing: .16em; color: var(--gold); }
+.tagpill { font-size: 0.75rem; color: var(--muted); border: 1px solid var(--line); border-radius: 99px; padding: 0.15rem 0.7rem; }
+.hc-name { font-family: var(--f-display); font-size: var(--step-1); }
+.spec { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0.9rem 1.4rem; margin: 0; }
+.spec div { display: grid; gap: 0.1rem; border-top: 1px solid var(--line); padding-top: 0.6rem; }
+.spec dt { font-size: 0.72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.spec dd { margin: 0; font-family: var(--f-data); font-size: 0.98rem; }
+.spec dd.up { color: var(--up); }
+.hc-foot { font-size: var(--step--1); color: var(--muted); }
+
+/* ── Real screenshots on the overview ───────── */
+.screen > .real-shot { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; background: #0F0F0F; }
+.dev-pad .screen { aspect-ratio: 3 / 4; }
+.dev-desk { left: 15%; width: 71%; }
+.dev-pad { width: 23%; left: 0; bottom: 2%; }
+@media (max-width: 600px) { .dev-desk { left: 0; width: 100%; } .dev-pad { width: 34%; } }
+.shot-fig { margin: 0; display: grid; gap: 1rem; }
+.shot-fig .f-desk { display: block; text-decoration: none; transition: transform .3s cubic-bezier(.2,.7,.2,1); }
+.shot-fig .f-desk:hover { transform: translateY(-4px); }
+.shot-fig figcaption { font-size: var(--step--1); color: var(--muted); }
+.plat-shot { display: flex; justify-content: center; align-items: flex-end; aspect-ratio: 10 / 8; text-decoration: none; margin-bottom: 0.6rem; }
+.plat-shot > div { transition: transform .3s cubic-bezier(.2,.7,.2,1); }
+.plat-shot:hover > div { transform: translateY(-4px); }
+.plat-shot .f-desk { width: 100%; }
+.plat-shot .f-pad { width: 54%; }
+.plat-shot .f-pad .screen { aspect-ratio: 3 / 4; }
+.plat-shot .f-phone { width: 30%; }
+@media (max-width: 860px) {
+  .plat-shot { aspect-ratio: auto; }
+  .plat-shot .f-desk { width: 90%; }
+  .plat-shot .f-pad { width: 52%; }
+  .plat-shot .f-phone { width: 36%; }
+}
+
+/* ── Tools ledger ────────────────────────────── */
+.ledger { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); border-top: 1px solid var(--line); }
+.tool { display: grid; grid-template-columns: 2.6rem minmax(0,1fr); gap: 1rem; padding: 1.6rem 1.4rem 1.6rem 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+.tool:nth-child(even) { padding-left: 1.4rem; padding-right: 0; border-left: 1px solid var(--line); }
+.tool svg { width: 26px; height: 26px; stroke: var(--gold); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; margin-top: 0.15rem; }
+.tool h3 { font-size: var(--step-1); font-family: var(--f-display); font-weight: 500; margin-bottom: 0.35rem; }
+.tool h3 span { font-family: var(--f-body); font-size: 0.85rem; color: var(--gold); margin-left: 0.4rem; opacity: 0; transition: opacity .2s; }
+.tool:hover h3 span, .tool:focus-visible h3 span { opacity: 1; }
+.tool p { color: var(--muted); font-size: 0.97rem; }
+@media (max-width: 760px) {
+  .ledger { grid-template-columns: minmax(0,1fr); }
+  .tool, .tool:nth-child(even) { padding-left: 0; padding-right: 0; border-left: 0; }
+}
+
+/* ── Devices section ─────────────────────────── */
+.trio { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: clamp(1rem, 2.5vw, 2rem); }
+.plat { display: grid; gap: 0.9rem; align-content: start; padding-top: 1.4rem; border-top: 2px solid var(--gold); }
+.plat .eyebrow { color: var(--muted); }
+.plat h3 { font-family: var(--f-display); font-size: var(--step-2); font-weight: 400; line-height: 1; }
+.plat p { color: var(--muted); }
+.plat ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.45rem; font-size: 0.95rem; }
+.plat li { display: grid; grid-template-columns: 0.9rem minmax(0,1fr); gap: 0.6rem; }
+.plat li::before { content: ""; width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); margin-top: 0.6rem; }
+.plat .btn { justify-self: start; margin-top: 0.4rem; }
+@media (max-width: 860px) { .trio { grid-template-columns: minmax(0,1fr); gap: 2.4rem; } }
+.sync-line { margin-top: clamp(2rem, 4vw, 3rem); display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; align-items: center; padding: 1.1rem 1.4rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--ink-2); color: var(--muted); font-size: 0.95rem; }
+.sync-line b { color: var(--text); font-weight: 600; }
+
+/* ── Tax section ─────────────────────────────── */
+.tax-grid { display: grid; grid-template-columns: minmax(0,0.9fr) minmax(0,1.1fr); gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+@media (max-width: 860px) { .tax-grid { grid-template-columns: minmax(0,1fr); } }
+.countries { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.countries span { font-size: 0.82rem; border: 1px solid var(--line); border-radius: 99px; padding: 0.25rem 0.75rem; color: var(--muted); }
+.countries span.more { border-color: var(--gold); color: var(--gold); }
+.rule-card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 1rem; overflow: hidden; }
+.rule-card header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.3rem; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.rule-card header b { font-family: var(--f-display); font-size: var(--step-1); font-weight: 500; }
+.lang { display: flex; gap: 0.3rem; }
+.lang button { font-size: 0.78rem; cursor: pointer; background: transparent; color: var(--muted); border: 1px solid var(--line); border-radius: 99px; padding: 0.2rem 0.7rem; }
+.lang button[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+.rule-card dl { margin: 0; display: grid; }
+.rule-card dl div { padding: 0.9rem 1.3rem; border-bottom: 1px solid var(--line); display: grid; gap: 0.2rem; }
+.rule-card dl div:last-child { border-bottom: 0; }
+.rule-card dt { font-family: var(--f-data); font-size: 0.72rem; letter-spacing: .14em; color: var(--gold); }
+.rule-card dd { margin: 0; color: var(--text); font-size: 0.95rem; }
+.fine { font-size: var(--step--1); color: var(--muted); margin-top: 1rem; }
+
+/* ── Closing CTA ─────────────────────────────── */
+.closing { padding-block: clamp(4.5rem, 10vw, 8rem) clamp(3rem, 6vw, 4.5rem); }
+.closing-inner {
+  border: 1px solid var(--gold); border-radius: 1.2rem;
+  padding: clamp(2rem, 6vw, 4rem) clamp(1.4rem, 5vw, 4rem);
+  display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); gap: 2rem; align-items: end;
+  background: radial-gradient(ellipse at 0% 0%, rgba(197,160,89,.12), transparent 60%), var(--ink-2);
+}
+.closing h2 { font-family: var(--f-display); font-size: var(--step-3); line-height: 1; font-weight: 400; }
+.closing h2 em { color: var(--gold); }
+.closing .cta-row { justify-content: flex-end; }
+@media (max-width: 860px) { .closing-inner { grid-template-columns: minmax(0,1fr); } .closing .cta-row { justify-content: flex-start; } }
+
+footer { border-top: 1px solid var(--line); padding-block: 1.6rem 2.2rem; }
+.foot { display: flex; flex-wrap: wrap; gap: 0.8rem 2rem; justify-content: space-between; color: var(--muted); font-size: var(--step--1); }
+.foot-links { display: flex; flex-wrap: wrap; gap: 0.8rem 2rem; justify-content: space-between; align-items: center; color: var(--text); font-size: 0.95rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
+.foot-links a { color: var(--gold); text-decoration: none; overflow-wrap: anywhere; }
+.foot-links a:hover { color: var(--gold-hi); text-decoration: underline; }
+
+/* ══ Device tour ═════════════════════════════════════════════ */
+.tour { padding-block: clamp(1.5rem, 4vw, 3rem) clamp(3rem, 6vw, 5rem); }
+.tour-head { display: flex; flex-wrap: wrap; gap: 1.4rem 2rem; justify-content: space-between; align-items: end; margin-bottom: clamp(1.8rem, 4vw, 3rem); }
+.tour-head > div { display: grid; gap: 0.7rem; max-width: 40rem; min-width: 0; }
+.tour-head h1 { font-family: var(--f-display); font-size: var(--step-3); font-weight: 400; line-height: 1; letter-spacing: -0.01em; }
+.tour-head h1 em { color: var(--gold); }
+.tour-head p { color: var(--muted); font-size: var(--step-1); line-height: 1.5; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 0.25rem; gap: 0.2rem; background: var(--ink-2); }
+.seg a, .seg button { text-decoration: none; padding: 0.45rem 1rem; border-radius: 999px; font-size: 0.88rem; color: var(--muted); font-weight: 500; background: transparent; border: 0; cursor: pointer; white-space: nowrap; }
+.seg a:hover, .seg button:hover { color: var(--text); }
+.seg a[aria-current="page"], .seg button[aria-pressed="true"] { background: var(--gold); color: var(--ink); }
+.seg.sm button { padding: 0.3rem 0.8rem; font-size: 0.8rem; }
+
+.tour-grid { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
+.tour-grid.is-ipad { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
+.tour-grid.is-iphone { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); }
+.tour-stage { display: grid; gap: 1rem; justify-items: center; min-width: 0; }
+#stage { width: 100%; display: grid; justify-items: center; min-width: 0; }
+.tour-stage .f-desk, .tour-stage .f-pad { width: 100%; }
+.tour-stage .f-phone { width: min(100%, 320px); }
+.screen > .shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; display: none; z-index: 6; background: #0F0F0F; }
+.real .screen > .shot { display: block; }
+.real .screen > .app, .real .island { display: none; }
+.tour-stage .f-pad.real { width: min(100%, 560px); }
+.f-pad.real .screen { aspect-ratio: 3 / 4; }
+.stage-mode { justify-self: center; }
+.stage-hint { display: flex; align-items: center; gap: 0.55rem; color: var(--muted); font-size: var(--step--1); }
+.stage-hint i { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 0 rgba(197,160,89,.6); animation: ping 2s infinite; flex: none; }
+@keyframes ping { 70% { box-shadow: 0 0 0 8px rgba(197,160,89,0); } 100% { box-shadow: 0 0 0 0 rgba(197,160,89,0); } }
+@media (max-width: 900px) {
+  .tour-grid, .tour-grid.is-ipad, .tour-grid.is-iphone { grid-template-columns: minmax(0, 1fr); }
+}
+
+.tour-info { display: grid; gap: 1.1rem; position: sticky; top: 1.5rem; min-width: 0; }
+.ti-count { display: flex; justify-content: space-between; gap: 1rem; }
+.ti-count span:last-child { color: var(--muted); }
+.ti-progress { display: grid; grid-template-columns: repeat(9, 1fr); gap: 4px; }
+.ti-progress a { height: 4px; border-radius: 2px; background: var(--line); }
+.ti-progress a.on { background: var(--gold); }
+.ti-progress a:hover { background: var(--gold-hi); }
+.tour-info h2 { font-family: var(--f-display); font-size: var(--step-2); font-weight: 400; line-height: 1.05; }
+.ti-lede { font-size: var(--step-1); line-height: 1.5; color: var(--text); }
+.ti-points { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.6rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+.ti-points li { display: grid; grid-template-columns: 0.9rem minmax(0,1fr); gap: 0.6rem; color: var(--muted); }
+.ti-points li::before { content: ""; width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); margin-top: 0.65rem; }
+.ti-tip { border: 1px solid var(--line); border-radius: 0.8rem; background: var(--ink-2); padding: 0.9rem 1.1rem; display: grid; gap: 0.3rem; }
+.ti-tip p { font-size: 0.95rem; }
+.ti-nav { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: space-between; }
+.tour-info.swap > :not(.ti-nav) { animation: fadeUp .35s ease both; }
+@keyframes fadeUp { from { opacity: .2; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.tour-more { margin-top: clamp(3rem, 6vw, 4.5rem); border-top: 1px solid var(--line); padding-top: 1.6rem; display: flex; flex-wrap: wrap; gap: 1rem 2.4rem; align-items: center; justify-content: space-between; }
+.tour-more .others { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+/* ── Interactive app mock. Mirrors the Flutter app (lib/main.dart): #0F0F0F ground, #1A1A1A cards,
+   gold #C5A059, Roboto. em-based; each device sets the base size. ── */
+.app {
+  --ink-4: #1A1A1A; --bg: #0F0F0F; --card: #1A1A1A; --hair: rgba(255,255,255,.12);
+  --pos: #4CAF50; --neg: #EF5350; --ok: #66BB6A;
+  height: 100%; position: relative; display: flex; overflow: hidden; background: var(--bg); color: #fff;
+  font-family: Roboto, "Segoe UI", system-ui, sans-serif;
+}
+.app [hidden] { display: none !important; }
+.d-desk .app { font-size: 1.15cqw; }
+.d-pad .app { font-size: 1.6cqw; flex-direction: column; }
+.d-phone .app { font-size: 3.9cqw; flex-direction: column; }
+.app-main { flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.app button { font-family: inherit; }
+
+/* app bar: back or menu on the left, centred gold title, gold icons on the right */
+.abar { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: .4em; padding: .55em .7em .35em; min-height: 3.7em; flex: none; }
+.d-phone .abar { padding-top: 3.3em; grid-template-columns: auto minmax(0,1fr) auto; }
+.app .num { font-family: inherit; }
+.abar .lead { justify-self: start; display: flex; }
+.abar .t { text-align: center; color: var(--gold); font-size: .95em; letter-spacing: .15em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.abar .acts { justify-self: end; display: flex; }
+.ib { width: 2.4em; height: 2.4em; display: grid; place-items: center; color: var(--gold); background: transparent; border: 0; border-radius: 50%; padding: 0; cursor: pointer; flex: none; }
+button.ib:hover { background: rgba(197,160,89,.12); }
+.d-phone .ib { width: 2.05em; height: 2.05em; }
+.app svg { width: 1.45em; height: 1.45em; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* metal ticker under the app bar */
+.tick { background: #0D0D0D; height: 2.1em; display: flex; align-items: center; gap: .9em; padding: 0 .9em; overflow: hidden; white-space: nowrap; font-size: .85em; flex: none; }
+.tick b { color: var(--gold); font-weight: 400; }
+.tick i { width: 1px; height: .9em; background: var(--hair); flex: none; }
+
+.app-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 1em 1.5em 1.5em; display: grid; gap: .85em; align-content: start; scrollbar-width: none; min-height: 0; }
+.app-body::-webkit-scrollbar { display: none; }
+.d-phone .app-body { padding: .8em 1em 1em; gap: .7em; }
+.app-body.swap { animation: fadeUp .3s ease both; }
+
+/* desktop sidebar (240px in the app) */
+.side { width: 16em; flex: none; background: var(--card); border-right: 1px solid var(--hair); display: flex; flex-direction: column; min-height: 0; }
+.side-hd { height: 5.4em; flex: none; display: grid; place-items: center; background: var(--bg); color: var(--gold); letter-spacing: .15em; font-size: 1.1em; }
+.side-list { overflow-y: auto; scrollbar-width: none; padding: .55em 0; display: grid; align-content: start; }
+.mi { display: flex; align-items: center; gap: 1.05em; margin: .15em .55em; padding: .75em .9em .75em 1em; border: 0; border-left: 3px solid transparent; border-radius: .6em; background: transparent; color: var(--text); font-size: 1em; text-align: left; cursor: pointer; line-height: 1.2; }
+.mi svg { color: var(--gold); }
+.mi:hover { background: rgba(255,255,255,.04); color: #fff; }
+.mi.on { background: rgba(197,160,89,.15); border-left-color: var(--gold); color: #fff; font-weight: 700; }
+
+/* "My Plan" entry at the top of the menu */
+.mp { display: flex; align-items: flex-start; gap: 1.05em; width: 100%; padding: 1.05em 1.25em; border: 0; background: transparent; color: #fff; text-align: left; cursor: pointer; }
+.mp svg { color: var(--gold); }
+.mp:hover, .mp.on { background: rgba(197,160,89,.1); }
+.mp-t { display: grid; justify-items: start; gap: .6em; }
+.mp-t b { font-size: 1em; }
+.upg { display: inline-flex; align-items: center; background: var(--gold); color: #000; font-weight: 700; font-size: .85em; padding: .3em .45em .3em .8em; border-radius: 1.1em; }
+.mng { display: inline-flex; align-items: center; color: var(--gold); font-weight: 700; font-size: .92em; }
+.upg svg, .mng svg { width: 1.15em; height: 1.15em; }
+.hr { height: 1px; background: var(--hair); margin: 0 0 .3em; }
+
+/* iPad and iPhone: drawer behind ☰, four tabs along the bottom */
+.bnav { flex: none; display: grid; grid-template-columns: repeat(4, 1fr); background: var(--card); padding: .45em 0 1.9em; }
+.d-pad .bnav { padding-bottom: .8em; }
+.bnav button { display: grid; justify-items: center; gap: .2em; background: transparent; border: 0; cursor: pointer; color: var(--muted); font-size: .76em; padding: .3em .2em; line-height: 1.2; }
+.bnav button svg { width: 1.9em; height: 1.9em; }
+.bnav button.on { color: var(--gold); }
+.scrim { position: absolute; inset: 0; background: rgba(0,0,0,.55); opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 3; }
+.drawer { position: absolute; top: 0; bottom: 0; left: 0; width: 82%; background: var(--card); z-index: 4; transform: translateX(-102%); transition: transform .28s cubic-bezier(.2,.7,.2,1); overflow-y: auto; scrollbar-width: none; display: grid; align-content: start; }
+.d-pad .drawer { width: 21em; }
+.drawer-hd { height: 9em; display: grid; place-items: center; background: var(--bg); color: var(--gold); letter-spacing: .15em; padding-top: 1.2em; }
+.drawer .mi { margin: 0; border-left: 0; border-radius: 0; padding: 1em 1.15em; gap: 1.9em; color: #fff; font-size: 1.02em; }
+.drawer .mi.on { background: rgba(197,160,89,.12); font-weight: 400; }
+.app.drawer-open .drawer { transform: none; }
+.app.drawer-open .scrim { opacity: 1; pointer-events: auto; }
+
+/* pages opened with Navigator.push (My Plan) cover the whole window */
+.route { position: absolute; inset: 0; background: var(--bg); z-index: 6; display: flex; flex-direction: column; }
+
+/* screen content pieces */
+.c { background: var(--ink-4); border: 1px solid var(--line); border-radius: 0.7em; padding: 0.85em 1em; min-width: 0; }
+.k { font-size: 0.72em; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+.big { font-family: var(--f-display); font-size: 2.6em; line-height: 1.05; }
+.d-phone .big { font-size: 2.2em; }
+.up { color: var(--up); }
+.dn { color: var(--down); }
+.mut { color: var(--muted); }
+.gold { color: var(--gold); }
+.sm { font-size: 0.82em; }
+.num { font-family: var(--f-data); font-variant-numeric: tabular-nums; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 0.7em; min-width: 0; }
+.row > span { min-width: 0; }
+.stack { display: grid; gap: 0.5em; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.4em; }
+.chip { border: 1px solid var(--line); border-radius: 99px; padding: 0.2em 0.75em; font-size: 0.8em; color: var(--muted); white-space: nowrap; }
+.chip.on { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+.search { display: flex; gap: 0.6em; align-items: center; background: rgba(0,0,0,.3); border-radius: 0.5em; padding: 0.65em 0.8em; color: var(--muted); font-size: 0.9em; }
+.search svg { width: 1.1em; height: 1.1em; stroke: var(--text); fill: none; stroke-width: 2; flex: none; }
+.grid { display: grid; gap: 0.7em; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); }
+.d-desk .grid.g4 { --cols: 4; }
+.d-phone .grid.g4 { --cols: 2; }
+.two { display: grid; gap: 0.85em; grid-template-columns: minmax(0,1fr) minmax(0,1fr); align-items: start; }
+.d-phone .two { grid-template-columns: minmax(0,1fr); }
+.d-desk .two.wide { grid-template-columns: minmax(0,1.4fr) minmax(0,1fr); }
+.dot { display: inline-block; width: 0.65em; height: 0.65em; border-radius: 50%; flex: none; }
+.label { display: flex; align-items: center; gap: 0.5em; font-size: 0.78em; letter-spacing: .1em; color: var(--muted); }
+.chart { position: relative; height: var(--ch, 10em); background: var(--ink-4); border: 1px solid var(--line); border-radius: 0.7em; overflow: hidden; }
+.chart svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.d-desk .chart { --ch: 11em; }
+.d-desk .chart.tall { --ch: 23em; }
+.d-pad .chart.tall { --ch: 19em; }
+.d-phone .chart { --ch: 8em; }
+.d-phone .chart.tall { --ch: 15em; }
+.mcoin { width: 3.2em; height: 3.2em; border-radius: 50%; flex: none; background: radial-gradient(circle at 35% 30%, #F4DFA8, #C5A059 45%, #7A5F2C); box-shadow: inset 0 0 0 0.25em rgba(0,0,0,.18); }
+.mcoin.ag { background: radial-gradient(circle at 35% 30%, #F2F5F7, #B0BEC5 45%, #6B787E); }
+.mcoin.xl { width: 6em; height: 6em; justify-self: center; }
+.mcoin.bar { border-radius: 0.4em; height: 2.2em; background: linear-gradient(135deg, #F0D9A0, #C5A059 50%, #8C6E34); }
+.item { display: flex; align-items: center; gap: 0.8em; min-width: 0; }
+.item > div { min-width: 0; flex: 1; }
+.item .nm { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kv { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0.6em 1em; }
+.kv div { border-top: 1px solid var(--line); padding-top: 0.45em; display: grid; gap: 0.1em; }
+.kv dd { margin: 0; font-family: var(--f-data); font-size: 0.95em; }
+.kv dt { font-size: 0.68em; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+dl.kv { margin: 0; }
+.field { display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--line); border-radius: 0.5em; padding: 0.55em 0.8em; background: rgba(0,0,0,.25); gap: 0.6em; }
+.field .lab { font-size: 0.72em; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
+.bars { display: grid; gap: 0.55em; }
+.bar-row { display: grid; grid-template-columns: minmax(0, 9em) minmax(0,1fr) 3.4em; gap: 0.7em; align-items: center; font-size: 0.88em; }
+.d-phone .bar-row { grid-template-columns: minmax(0, 7em) minmax(0,1fr) 3.2em; }
+.bar-row > span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-track { height: 0.6em; background: rgba(255,255,255,.05); border-radius: 99px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--gold); border-radius: 99px; }
+.best { font-size: 0.66em; letter-spacing: .1em; background: rgba(127,199,154,.15); color: var(--up); border-radius: 99px; padding: 0.15em 0.6em; margin-left: 0.4em; }
+.gbtn { background: var(--gold); color: var(--ink); border-radius: 0.5em; padding: 0.6em 1em; font-weight: 600; font-size: 0.85em; text-align: center; }
+.obtn { border: 1px solid var(--gold); color: var(--gold); border-radius: 0.5em; padding: 0.45em 0.9em; font-size: 0.8em; white-space: nowrap; }
+.news { display: grid; grid-template-columns: 4.6em minmax(0,1fr); gap: 0.8em; align-items: center; }
+.thumb { height: 3.4em; border-radius: 0.5em; background: linear-gradient(135deg, #3a3020, #1a1710); position: relative; overflow: hidden; }
+.thumb::after { content: ""; position: absolute; inset: 30% -10% -20% 20%; border-radius: 50%; background: radial-gradient(circle, rgba(197,160,89,.55), transparent 70%); }
+.thumb.s::after { background: radial-gradient(circle, rgba(176,190,197,.55), transparent 70%); }
+.thumb.p::after { background: radial-gradient(circle, rgba(144,202,249,.5), transparent 70%); }
+.news .h { font-weight: 600; line-height: 1.3; font-size: 0.95em; }
+.rule { display: grid; gap: 0.25em; border-top: 1px solid var(--line); padding-top: 0.6em; }
+.rule .rk { font-family: var(--f-data); font-size: 0.68em; letter-spacing: .14em; color: var(--gold); }
+.rule p { font-size: 0.88em; line-height: 1.45; }
+.alert-ic { width: 2.2em; height: 2.2em; border-radius: 50%; display: grid; place-items: center; flex: none; background: rgba(197,160,89,.12); color: var(--gold); }
+.alert-ic svg { width: 1.2em; height: 1.2em; stroke: currentColor; fill: none; stroke-width: 1.8; }
+.switch { width: 2.3em; height: 1.3em; border-radius: 99px; background: var(--gold); position: relative; flex: none; }
+.switch::after { content: ""; position: absolute; right: 0.15em; top: 0.15em; width: 1em; height: 1em; border-radius: 50%; background: var(--ink); }
+.switch.off { background: var(--line); }
+.switch.off::after { right: auto; left: 0.15em; background: var(--muted); }
+.desk-only { display: none; }
+.d-desk .desk-only { display: block; }
+.d-desk .grid.desk-only, .d-desk .two.desk-only { display: grid; }
+
+/* ── Vault: header card, holdings tiles, segmented toggles (main.dart _buildHeader, _holdingsTile) ── */
+.hcard { background: var(--card); border-radius: .8em; padding: 1.3em 1.6em; display: grid; gap: .65em; }
+.d-phone .hcard { padding: 1em 1.1em; }
+.hcard .pname { text-align: center; color: var(--text); font-weight: 700; font-size: 1.2em; letter-spacing: .03em; margin-bottom: .2em; }
+.mets { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: .6em; }
+.met { display: grid; gap: .15em; min-width: 0; }
+.met .l { font-size: .62em; letter-spacing: .08em; color: var(--muted); }
+.met .v { font-size: 1.12em; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.d-phone .met .v { font-size: .82em; }
+.met .v.soft { color: var(--text); }
+.avg { display: flex; align-items: center; gap: .25em; font-size: .62em; letter-spacing: .08em; color: var(--muted); }
+.avg svg { width: 1.6em; height: 1.6em; }
+.gline { height: 2px; background: var(--gold); margin-top: .5em; }
+.pos { color: var(--pos); }
+.neg { color: var(--neg); }
+.tools { display: flex; gap: .7em; }
+.cbtn { width: 2.1em; height: 2.1em; border-radius: 50%; display: grid; place-items: center; background: var(--gold); color: #000; border: 1px solid var(--gold); }
+.cbtn.o { background: rgba(0,0,0,.26); color: var(--gold); }
+.cbtn svg { width: 1.2em; height: 1.2em; stroke-width: 2.2; }
+.segt { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; padding: .28em; background: rgba(0,0,0,.26); border: 1px solid var(--hair); border-radius: .55em; }
+.segt button { border: 0; background: transparent; color: var(--text); font-weight: 700; font-size: .78em; padding: .75em .2em; border-radius: .45em; cursor: pointer; }
+.segt button:hover { color: #fff; }
+.segt button[aria-pressed="true"] { background: var(--gold); color: #000; }
+.tile { display: grid; grid-template-columns: minmax(0,2fr) repeat(var(--n,4), minmax(0,1fr)) auto; align-items: center; gap: .3em; width: 100%; background: var(--card); border: 0; border-radius: .55em; padding: 1em 1.15em; color: #fff; text-align: left; font: inherit; }
+button.tile { cursor: pointer; }
+button.tile:hover { background: #232018; }
+.tile .nm { font-weight: 700; font-size: 1.12em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mc { display: grid; gap: .3em; justify-items: center; text-align: center; min-width: 0; }
+.mc .l { font-size: .66em; letter-spacing: .07em; color: var(--muted); }
+.mc .v { font-weight: 700; font-size: .95em; white-space: nowrap; }
+.mc .v.g { color: var(--gold); }
+.tile .end { display: flex; align-items: center; gap: .35em; color: var(--gold); }
+.tile .end svg { width: 1.25em; height: 1.25em; }
+.tile .end svg:last-child { color: var(--muted); }
+.d-pad .tile .nm { font-size: 1em; }
+.d-phone .tile { padding: .8em .7em; gap: .15em; grid-template-columns: minmax(0,1.5fr) repeat(var(--n,4), minmax(0,1fr)) auto; }
+.d-phone .tile .nm { font-size: .8em; white-space: normal; line-height: 1.2; }
+.d-phone .mc .l { font-size: .5em; letter-spacing: .03em; }
+.d-phone .mc .v { font-size: .6em; }
+.d-phone .tile .end svg:first-child:not(:last-child) { display: none; }
+
+/* phone/tablet home: AURUM VAULT title, PRICES / MY PORTFOLIOS tabs */
+.mh-title { text-align: center; color: var(--gold); font-weight: 700; font-size: 1.25em; letter-spacing: .19em; padding-top: .1em; }
+.mh-tabs { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--hair); margin-bottom: .2em; }
+.mh-tabs button { background: transparent; border: 0; border-bottom: 2px solid transparent; color: var(--muted); font-weight: 700; font-size: 1em; letter-spacing: .06em; padding: .75em .2em; cursor: pointer; }
+.mh-tabs button[aria-pressed="true"] { color: var(--gold); border-bottom-color: var(--gold); }
+.prices { display: grid; gap: .65em; padding-top: 1.6em; }
+.prow { display: flex; justify-content: space-between; align-items: center; padding: .9em; border-radius: .5em; border: 1px solid; }
+.prow .m { font-weight: 700; font-size: .82em; letter-spacing: .06em; }
+.prow .p { font-weight: 700; font-size: 1.12em; }
+
+/* charts page: metal / ratio dropdown, currency, ranges, line / candle / tools */
+.ddrow { display: grid; grid-template-columns: minmax(0,2fr) minmax(0,1fr); gap: .5em; position: relative; }
+.ddrow.solo { grid-template-columns: minmax(0,1fr); }
+.dd { display: flex; justify-content: space-between; align-items: center; gap: .5em; padding: .7em .85em; background: rgba(0,0,0,.26); border: 1px solid rgba(197,160,89,.3); border-radius: .5em; font-size: .85em; color: #fff; text-align: left; }
+button.dd { cursor: pointer; }
+button.dd:hover { border-color: var(--gold); }
+.dd svg { width: 1.3em; height: 1.3em; color: var(--text); }
+.ddlist { position: absolute; top: calc(100% + .3em); left: 0; width: min(100%, 22em); background: var(--card); border: 1px solid var(--hair); border-radius: .5em; z-index: 2; padding: .3em 0; box-shadow: 0 .8em 2em rgba(0,0,0,.6); }
+.ddlist button { display: flex; justify-content: space-between; align-items: center; gap: .6em; width: 100%; padding: .6em .9em; background: transparent; border: 0; color: #fff; font-size: .85em; text-align: left; cursor: pointer; }
+.ddlist button:hover, .ddlist button.on { background: rgba(197,160,89,.12); }
+.lock { font-size: .75em; font-weight: 700; color: var(--gold); border: 1px solid rgba(197,160,89,.55); border-radius: 99px; padding: .05em .55em; white-space: nowrap; }
+.rngrow { display: flex; align-items: center; gap: .5em; min-width: 0; }
+.rng { display: flex; gap: .45em; overflow: hidden; min-width: 0; flex: 1; }
+.rng span { padding: .5em .95em; border-radius: 1.2em; background: rgba(0,0,0,.26); border: 1px solid var(--hair); font-size: .68em; font-weight: 700; color: var(--text); white-space: nowrap; }
+.rng span.on { background: var(--gold); border-color: var(--gold); color: #000; }
+.sty { display: flex; gap: .35em; flex: none; }
+.sty span { padding: .35em .5em; border-radius: .35em; background: rgba(0,0,0,.26); border: 1px solid var(--hair); display: grid; place-items: center; color: var(--text); }
+.sty span.on { border-color: var(--gold); color: var(--gold); background: rgba(197,160,89,.2); }
+.sty svg { width: 1.1em; height: 1.1em; }
+.chart.locked svg { filter: blur(3px); opacity: .55; }
+.lockov { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: .7em; text-align: center; padding: 1em; }
+.lockov b { color: var(--gold); font-size: .95em; }
+.lockov button { background: var(--gold); color: #000; border: 0; font-weight: 700; font-size: .85em; padding: .55em 1.2em; border-radius: 1.4em; cursor: pointer; }
+
+/* metal converter page */
+.cv-head { display: flex; align-items: center; gap: .6em; }
+.cv-head b { flex: 1; color: var(--gold); letter-spacing: .15em; font-size: .95em; }
+.tbtn { display: inline-flex; align-items: center; gap: .3em; font-size: .9em; color: var(--muted); }
+.tbtn.g { color: var(--gold); }
+.tbtn svg { width: 1.1em; height: 1.1em; }
+.slab { font-size: .68em; letter-spacing: .14em; color: var(--muted); }
+.cv-card { background: var(--card); border-radius: .7em; padding: .85em; display: grid; gap: .65em; }
+.pair { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: .6em; }
+.inp { display: flex; justify-content: space-between; align-items: center; gap: .4em; padding: .75em .85em; background: rgba(0,0,0,.26); border-radius: .5em; font-size: .88em; min-width: 0; }
+.inp > span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.inp.pick { border: 1px solid rgba(197,160,89,.3); }
+.inp svg { width: 1.2em; height: 1.2em; color: var(--text); }
+.inp.qty { display: grid; justify-content: stretch; gap: .2em; }
+.inp.qty .l { font-size: .75em; color: var(--muted); }
+.cv-go { justify-self: center; width: 12em; text-align: center; background: var(--gold); color: #000; font-weight: 700; letter-spacing: .08em; padding: .9em; border-radius: 1.6em; font-size: .9em; }
+.cv-res { background: var(--card); border: 1px solid rgba(197,160,89,.4); border-radius: .7em; padding: 1em; font-size: 1.02em; line-height: 1.4; }
+
+/* ── Plans (overview). Under 900 wide: stacked, max 640. 900+: three equal cards, max 1200. ── */
+.plans-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 1.4rem 2rem; margin-bottom: clamp(2rem, 4vw, 3rem); }
+.plans-head .sec-head { margin-bottom: 0; }
+.price-grid { display: grid; gap: 1.2rem; grid-template-columns: minmax(0, 1fr); max-width: 640px; margin-inline: auto; }
+@media (min-width: 900px) { .price-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 1200px; } }
+.pcard { background: var(--ink-2); border: 1px solid var(--line); border-radius: 1rem; padding: clamp(1.3rem, 3vw, 1.8rem); display: grid; grid-template-rows: auto auto 1fr auto; gap: 1.1rem; min-width: 0; }
+.pcard .pname { font-family: var(--f-data); letter-spacing: .18em; font-size: .8rem; color: var(--gold); }
+.pcard .price { display: flex; align-items: baseline; gap: .4rem; flex-wrap: wrap; }
+.pcard .price b { font-family: var(--f-display); font-weight: 400; font-size: var(--step-2); line-height: 1; font-variant-numeric: lining-nums tabular-nums; }
+.pcard .price span { color: var(--muted); font-size: .9rem; }
+.feats { list-style: none; margin: 0; padding: 1rem 0 0; display: grid; gap: .5rem; align-content: start; border-top: 1px solid var(--line); font-size: .95rem; }
+.feats li { display: grid; grid-template-columns: 1.1rem minmax(0, 1fr); gap: .5rem; }
+.feats li::before { content: "✓"; color: var(--gold); font-weight: 600; }
+.feats li.n { color: var(--muted); }
+.feats li.n::before { content: "✗"; color: var(--muted); }
+.pcard .act { display: grid; gap: .55rem; }
+.pcard .act .btn { justify-content: center; }
+.trial { font-size: var(--step--1); color: var(--muted); }
+.plans-note { margin: 1.6rem auto 0; max-width: 1200px; display: flex; flex-wrap: wrap; gap: .6rem 1.6rem; color: var(--muted); font-size: .92rem; justify-content: center; text-align: center; }
+.ptag { font-family: var(--f-body); font-style: normal; font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(197,160,89,.5); border-radius: 99px; padding: .1rem .5rem; margin-left: .5rem; vertical-align: middle; font-weight: 600; }
+
+/* search + browse-by-filter block (Price Calculator, Premium Analyser) */
+.srow { display: flex; gap: .5em; }
+.srch { flex: 1; display: flex; align-items: center; gap: .75em; background: var(--card); border-radius: .5em; padding: .95em 1em; color: var(--muted); font-size: .9em; min-width: 0; white-space: nowrap; overflow: hidden; }
+.srch svg { color: #fff; }
+.sq { width: 3.3em; flex: none; display: grid; place-items: center; background: var(--card); border-radius: .5em; color: var(--gold); }
+.orb { display: flex; align-items: center; gap: 1em; font-size: .62em; letter-spacing: .15em; color: var(--muted); margin: .4em 0; }
+.orb::before, .orb::after { content: ""; flex: 1; height: 1px; background: var(--hair); }
+.fgrid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: .9em; }
+.fgrid .span2 { grid-column: 1 / -1; }
+.fcol { display: grid; gap: .55em; min-width: 0; align-content: start; }
+.fcol > .l { font-size: .62em; letter-spacing: .15em; color: #fff; }
+.fdd { display: flex; justify-content: space-between; align-items: center; gap: .4em; padding: .75em .85em; background: var(--card); border: 1px solid rgba(197,160,89,.2); border-radius: .5em; font-size: .85em; min-width: 0; }
+.fdd > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fdd svg { width: 1.3em; height: 1.3em; color: var(--text); }
+
+/* item card + list rows */
+.icard { background: var(--card); border: 1px solid; border-radius: .8em; padding: 1.3em; display: grid; gap: 1em; margin-top: .6em; }
+.irow { display: grid; grid-template-columns: minmax(0,3fr) repeat(var(--n,6), minmax(0,2fr)) auto; gap: .8em; align-items: center; }
+.icard > .irow:not(.res) { grid-template-columns: minmax(0,3fr) repeat(var(--n,6), minmax(0,2fr)); }
+.irow.res { grid-template-columns: repeat(5, minmax(0,1fr)); }
+.inm { font-weight: 700; font-size: .95em; min-width: 0; }
+.inm small { display: block; font-weight: 400; font-size: .78em; color: var(--muted); margin-top: .25em; }
+.irow .mc .l { font-size: .6em; }
+.ed { border-bottom: 1px solid rgba(197,160,89,.6); padding: 0 .4em; }
+.acts2 { display: flex; justify-content: flex-end; gap: 1.1em; color: var(--gold); }
+.hr2 { height: 1px; background: var(--hair); margin: .3em 0; }
+.ltot { display: flex; align-items: center; gap: .9em; background: var(--card); border: 1px solid rgba(197,160,89,.3); border-radius: .5em; padding: .9em 1em; color: var(--gold); }
+.ltot .t { margin-left: auto; font-weight: 700; font-size: 1.2em; }
+.ltot .x { font-weight: 700; font-size: .72em; }
+.ltot svg { width: 1.25em; height: 1.25em; }
+.mutd { color: var(--muted); display: flex; }
+.k2 { font-size: .62em; letter-spacing: .15em; color: var(--muted); }
+.lrow { background: var(--card); border-radius: .5em; padding: .85em 1em; }
+.ai { display: flex; gap: .55em; color: var(--gold); flex: none; }
+.ai svg { width: 1.15em; height: 1.15em; }
+.ai svg:last-child { color: var(--muted); }
+.pgrid { display: grid; grid-template-columns: minmax(0,2fr) repeat(3, minmax(0,1fr)); gap: .8em; }
+.tin { display: flex; align-items: center; gap: .5em; padding: .8em .85em; background: rgba(0,0,0,.26); border-radius: .5em; font-size: .88em; min-width: 0; white-space: nowrap; overflow: hidden; }
+.tin.ph { color: var(--muted); }
+.tin.dt svg { width: 1.05em; height: 1.05em; color: var(--gold); }
+.tin.dt svg:last-child { color: var(--muted); margin-left: auto; }
+.be { font-size: .8em; color: var(--muted); margin: 0; }
+.plist { display: grid; gap: .6em; }
+.plist > .irow:first-child { padding: .85em 1em; border: 1px solid rgba(197,160,89,.3); border-radius: .5em; }
+.d-pad .irow, .d-phone .irow, .d-pad .icard > .irow:not(.res), .d-phone .icard > .irow:not(.res), .d-phone .irow.res { grid-template-columns: repeat(3, minmax(0,1fr)); row-gap: .9em; }
+.d-pad .irow > .inm, .d-phone .irow > .inm, .d-pad .irow > .k2, .d-phone .irow > .k2 { grid-column: 1 / -1; }
+.d-pad .irow > .ai, .d-phone .irow > .ai { grid-column: 1 / -1; justify-content: flex-end; }
+.d-phone .pgrid { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+.d-phone .ltot { gap: .6em; }
+
+/* alerts page */
+.ahead { display: flex; justify-content: space-between; align-items: center; }
+.addb { width: 2.3em; height: 2.3em; background: var(--gold); color: #000; border-radius: .5em; display: grid; place-items: center; }
+.addb svg { width: 1.25em; height: 1.25em; stroke-width: 2.2; }
+.anote { font-size: .68em; color: var(--muted); margin: -.5em 0 .5em; line-height: 1.4; }
+.acard { display: flex; align-items: center; gap: .85em; background: var(--card); border: 1px solid var(--hair); border-radius: .7em; padding: 1em; }
+.acard.trig { border-color: rgba(197,160,89,.5); }
+.acard > svg { color: var(--muted); width: 1.6em; height: 1.6em; }
+.acard.trig > svg { color: var(--gold); }
+.acard .tx { flex: 1; min-width: 0; }
+.acard b { font-size: .92em; }
+.acard .st { font-size: .76em; color: var(--muted); margin-top: .3em; }
+.acard.trig .st { color: var(--gold); }
+.tgl { width: 2.6em; height: 1.5em; border-radius: 1em; background: rgba(197,160,89,.45); position: relative; flex: none; }
+.tgl::after { content: ""; position: absolute; right: .15em; top: .15em; width: 1.2em; height: 1.2em; border-radius: 50%; background: var(--gold); }
+.tgl.off { background: rgba(0,0,0,.35); box-shadow: inset 0 0 0 1px var(--muted); }
+.tgl.off::after { right: auto; left: .15em; background: var(--muted); }
+
+/* news page */
+.nlab { font-size: .75em; color: var(--muted); margin: 0; }
+.ncard { display: grid; grid-template-columns: 5.6em minmax(0,1fr); background: var(--card); border-radius: .7em; overflow: hidden; }
+.nsq { display: grid; place-items: center; font-weight: 700; font-size: 1.35em; letter-spacing: .06em; min-height: 4.2em; }
+.nbody { padding: .75em .9em; display: grid; gap: .45em; align-content: start; }
+.ntop { display: flex; gap: .5em; align-items: center; font-size: .68em; color: var(--muted); }
+.ncat { font-weight: 700; letter-spacing: .06em; padding: .15em .55em; border-radius: .3em; font-size: .92em; }
+.nt { font-weight: 600; font-size: .9em; line-height: 1.35; }
+.nago { font-size: .68em; color: var(--muted); }
+
+/* tax page */
+.txrow { display: flex; gap: .6em; align-items: center; }
+.txrow .fdd { flex: 2; }
+.txrow .sp { flex: 3; }
+.d-phone .txrow .sp { display: none; }
+.trb { padding: .75em .85em; background: rgba(0,0,0,.26); border: 1px solid rgba(255,255,255,.24); border-radius: .5em; font-size: .8em; font-weight: 600; flex: none; }
+.tcard { background: var(--card); border: 1px solid rgba(197,160,89,.3); border-radius: .8em; padding: 1.4em 1.4em .4em; margin-top: .6em; }
+.tcard h4 { margin: 0 0 .5em; color: var(--gold); font-family: Consolas, "Courier New", monospace; font-size: 1.2em; letter-spacing: .18em; font-weight: 700; }
+.tsec + .tsec { border-top: 1px solid var(--hair); }
+.tsec button { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: .6em; padding: 1.1em 0; background: transparent; border: 0; color: #fff; font-family: Consolas, "Courier New", monospace; font-size: .95em; letter-spacing: .17em; font-weight: 700; text-align: left; cursor: pointer; }
+.tsec button svg { color: var(--muted); width: 1.6em; height: 1.6em; }
+.tsec p { margin: 0 0 1.2em; white-space: pre-line; font-size: 1.02em; line-height: 1.6; }
+.tdisc { text-align: center; font-size: .72em; color: var(--muted); margin: .6em 0 0; }
+
+/* ── My Plan page inside the app mock (lib/billing/my_plan_page.dart) ── */
+.pm { width: 100%; margin-inline: auto; display: grid; gap: 1.3em; }
+.d-desk .pm { padding: .6em 1em 0; }
+.pm-status b { font-size: 1.15em; }
+.pm-cycle { justify-self: start; display: inline-flex; padding: .2em; background: var(--card); border: 1px solid var(--hair); border-radius: 1.6em; }
+.pm-cycle button { padding: .55em 1.3em; border-radius: 1.4em; border: 0; background: transparent; color: var(--text); font-weight: 700; font-size: .92em; cursor: pointer; }
+.pm-cycle button[aria-pressed="true"] { background: var(--gold); color: #000; }
+.pm-grid { display: grid; gap: 1.15em; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; }
+.d-phone .pm-grid { grid-template-columns: minmax(0, 1fr); }
+.pm-card { background: var(--card); border: 1px solid var(--hair); border-radius: 1em; padding: 1.3em; display: flex; flex-direction: column; min-width: 0; }
+.pm-card.cur { border: 2px solid var(--gold); }
+.pm-yp { text-align: center; background: rgba(197,160,89,.15); color: var(--gold); font-size: .72em; letter-spacing: .15em; font-weight: 700; padding: .35em; border-radius: .45em; margin-bottom: .75em; }
+.pm-name { color: var(--gold); font-size: 1.07em; letter-spacing: .14em; font-weight: 700; }
+.pm-price { font-size: 1.55em; font-weight: 700; margin: .2em 0 1.1em; }
+.pm-feats { list-style: none; margin: 0; padding: 0; display: grid; gap: .55em; align-content: start; font-size: .88em; color: var(--text); flex: 1; }
+.pm-feats li { display: grid; grid-template-columns: 1.2em minmax(0,1fr); gap: .5em; }
+.pm-feats li::before { content: "✓"; color: var(--ok); font-weight: 700; }
+.pm-feats li.n { color: var(--muted); }
+.pm-feats li.n::before { content: "✕"; color: var(--neg); }
+.pm-act { margin-top: 1.15em; display: grid; gap: .45em; }
+.pm-btn { text-align: center; background: var(--gold); color: #000; font-weight: 700; font-size: .92em; padding: .85em; border-radius: 1.6em; }
+.pm-btn.cur { background: rgba(197,160,89,.15); color: var(--gold); }
+.pm-trial { text-align: center; font-size: .74em; color: var(--muted); }
+.pm-foot { display: grid; justify-items: center; gap: .6em; padding: .4em 0 1em; }
+.pm-foot .r { color: var(--gold); font-size: .92em; }
+.pm-foot .l { color: var(--muted); font-size: .85em; display: flex; gap: 1.8em; }
+
+/* tour panel: plan preview + plan note */
+.ti-preview { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; padding: .8rem 1rem; border: 1px dashed var(--line); border-radius: .8rem; }
+.ti-preview > span { font-size: var(--step--1); color: var(--muted); }
+.ti-plan { display: grid; gap: .25rem; border-left: 2px solid var(--gold); padding-left: .9rem; }
+.ti-plan p { font-size: .95rem; color: var(--muted); }
+
+/* load sequence: devices settle onto the bench */
+@media (prefers-reduced-motion: no-preference) {
+  .dev-desk { animation: rise .9s cubic-bezier(.2,.7,.2,1) both; }
+  .dev-pad { animation: rise .9s .15s cubic-bezier(.2,.7,.2,1) both; }
+  .dev-phone { animation: rise .9s .3s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes rise { from { translate: 0 18px; opacity: .35; } to { translate: 0 0; opacity: 1; } }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tape-track, .stage-hint i { animation: none; }
+  .app-body.swap, .tour-info.swap > * { animation: none !important; }
+  .ph-drawer, .scrim, .dev { transition: none; }
+}
+
+/* ── Hero without a headline ─────────────────── */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.hero-head { grid-template-columns: minmax(0, 1fr); }
+.hero-copy { max-width: 52rem; }
+.hero-copy p { color: var(--text); font-family: var(--f-display); font-size: clamp(1.45rem, 1.1rem + 1.5vw, 2.3rem); line-height: 1.3; }
+
+/* ── The tour ────────────────────────────────── */
+.gt-wrap { width: 100%; max-width: 1440px; margin-inline: auto; padding-inline: clamp(16px, 3vw, 40px); }
+.gt-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1rem 2rem; margin-bottom: clamp(1.5rem, 3vw, 2.4rem); }
+.gt-head .sec-head { margin-bottom: 0; }
+.gt { display: grid; grid-template-columns: 260px minmax(0, 1fr) 340px; gap: clamp(1.2rem, 2.4vw, 2.4rem); align-items: start; }
+.gt-menu ol { list-style: none; margin: 0; padding: 0.4rem; display: grid; gap: 0.15rem; background: var(--ink-2); border: 1px solid var(--line); border-radius: 1rem; }
+.gt-menu button { width: 100%; display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 0.8rem; border: 0; border-radius: 0.7rem; background: transparent; color: var(--text); font: 500 0.95rem/1.2 var(--f-body); text-align: left; cursor: pointer; transition: background .15s, color .15s; }
+.gt-menu button svg { width: 20px; height: 20px; flex: none; stroke: var(--gold); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.gt-menu button span { flex: 1; min-width: 0; }
+.gt-menu button em { font-style: normal; font-size: 0.68rem; letter-spacing: .06em; color: var(--gold); border: 1px solid var(--gold); border-radius: 99px; padding: 0.05rem 0.45rem; }
+.gt-menu button:hover { background: #241F15; }
+.gt-menu button[aria-current="page"] { background: var(--gold); color: var(--ink); }
+.gt-menu button[aria-current="page"] svg { stroke: var(--ink); }
+.gt-menu button[aria-current="page"] em { color: var(--ink); border-color: var(--ink); }
+.gt-menu button:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
+.gt-stage { display: flex; justify-content: center; min-width: 0; position: sticky; top: 1rem; }
+.gt-frame { width: 100%; }
+.gt-stage.is-ipad .gt-frame { width: min(100%, 460px); }
+.gt-stage.is-ipad .screen { aspect-ratio: 3 / 4; }
+.gt-stage.is-iphone .gt-frame { width: min(100%, 310px); }
+.gt-info { display: grid; gap: 1rem; align-content: start; }
+.gt-count { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.gt-tag { font-size: 0.72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); background: var(--gold); border-radius: 99px; padding: 0.15rem 0.6rem; }
+.gt-info h3 { font-family: var(--f-display); font-weight: 400; font-size: var(--step-2); line-height: 1.1; }
+.gt-lede { color: var(--text); font-size: 1.05rem; }
+.gt-points { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.7rem; font-size: 0.95rem; color: var(--muted); }
+.gt-points li { display: grid; grid-template-columns: 0.9rem minmax(0, 1fr); gap: 0.6rem; }
+.gt-points li::before { content: ""; width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); margin-top: 0.55rem; }
+.gt-box { border-top: 1px solid var(--line); padding-top: 0.8rem; display: grid; gap: 0.3rem; }
+.gt-box p { font-size: 0.92rem; color: var(--muted); }
+.gt-nav { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: space-between; padding-top: 0.4rem; }
+.gt-nav .btn { cursor: pointer; }
+.gt-swap { animation: fadeUp .35s ease both; }
+@media (max-width: 1099px) {
+  .gt { grid-template-columns: minmax(0, 1fr) 320px; }
+  .gt-menu { grid-column: 1 / -1; }
+  .gt-menu ol { display: flex; overflow-x: auto; scrollbar-width: thin; }
+  .gt-menu li { flex: none; }
+  .gt-menu button { white-space: nowrap; }
+  .gt-stage { position: static; }
+}
+@media (max-width: 760px) {
+  .gt { grid-template-columns: minmax(0, 1fr); }
+  .gt-stage { scroll-margin-top: 5rem; }
+  .gt-stage.is-ipad .gt-frame { width: min(100%, 360px); }
+  .gt-stage.is-iphone .gt-frame { width: min(78%, 290px); }
+}
+@media (prefers-reduced-motion: reduce) { .gt-swap { animation: none; } }
+
+/* -- Hero: text beside the devices, a label on each device -- */
+.hero > .wrap { max-width: 1440px; padding-inline: clamp(16px, 3vw, 40px); display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 9fr); gap: clamp(1.5rem, 3.5vw, 3.5rem); align-items: start; }
+.hero > .wrap > .hero-head { padding-top: 1.4rem; }
+.hero-copy { max-width: 30rem; }
+.hero-copy p { font-size: clamp(1.1rem, 0.85rem + 0.75vw, 1.55rem); line-height: 1.38; }
+.hero .bench { margin-top: 0; }
+.hero .scene { margin-top: 1.4rem; }
+.dev-label {
+  position: absolute; left: 50%; top: 0; transform: translate(-50%, -55%); z-index: 8;
+  font-family: var(--f-display); font-size: clamp(0.85rem, 0.7rem + 0.4vw, 1.1rem); font-weight: 400; letter-spacing: 0.02em;
+  color: var(--text); background: #000000; border-radius: 6px; padding: 0.2em 0.75em; white-space: nowrap;
+}
+/* phone on the left, tablet on the right */
+.hero .dev-desk { left: 11%; width: 63%; }
+.hero .dev-pad { left: auto; right: 0; width: 31%; }
+.hero .dev-phone { right: auto; left: 1.5%; width: 20%; }
+@media (max-width: 600px) { .hero .dev-desk { left: 4%; width: 86%; } .hero .dev-pad { width: 42%; } .hero .dev-phone { width: 29%; } }
+@media (max-width: 980px) {
+  .hero > .wrap { grid-template-columns: minmax(0, 1fr); }
+  .hero-copy { max-width: 40rem; }
+}
+
+/* -- Expand any screenshot -- */
+.zoom-btn {
+  position: absolute; top: 6px; right: 6px; z-index: 9;
+  width: clamp(26px, 2.4vw, 34px); height: clamp(26px, 2.4vw, 34px);
+  display: grid; place-items: center; padding: 0; cursor: zoom-in;
+  background: #000000; color: var(--text); border: 1px solid var(--bezel-edge); border-radius: 8px;
+  opacity: .85; transition: opacity .15s, transform .15s;
+}
+.zoom-btn svg { width: 60%; height: 60%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.zoom-btn:hover, .zoom-btn:focus-visible { opacity: 1; transform: scale(1.08); }
+.zoom-btn:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
+.f-phone .zoom-btn { top: 4.5%; right: 7%; }
+.lightbox { border: 0; padding: 0; margin: auto; background: transparent; max-width: 96vw; max-height: 94vh; overflow: visible; }
+.lightbox::backdrop { background: rgba(0, 0, 0, .9); }
+.lightbox figure { margin: 0; display: grid; gap: 0.6rem; justify-items: center; }
+.lightbox img { display: block; max-width: 96vw; max-height: 86vh; width: auto; height: auto; border-radius: 10px; border: 1px solid var(--bezel-edge); background: #0F0F0F; }
+.lightbox figcaption { color: var(--text); font-size: 0.95rem; text-align: center; }
+.lightbox .lb-close {
+  position: fixed; top: 14px; right: 14px; width: 44px; height: 44px; border-radius: 50%;
+  background: #000000; color: var(--text); border: 1px solid var(--bezel-edge); font-size: 1.6rem; line-height: 1; cursor: pointer;
+}
+.lightbox .lb-close:hover { color: var(--gold-hi); border-color: var(--gold); }
+
+/* -- "Coming soon" message for the store buttons -- */
+.soon { border: 1px solid var(--bezel-edge); border-radius: 16px; padding: clamp(1.4rem, 4vw, 2.2rem); width: min(92vw, 440px); background: #000000; color: var(--text); text-align: center; }
+.soon::backdrop { background: rgba(0, 0, 0, .8); }
+.soon h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(1.4rem, 1.1rem + 1.2vw, 1.9rem); line-height: 1.2; margin-bottom: 0.6rem; }
+.soon p { color: var(--text); margin-bottom: 1.4rem; }
+.soon .btn { cursor: pointer; min-width: 8rem; justify-content: center; }
+</style>
+</head>
+<body>
+<!-- Ticker -->
+<div class="tape" aria-label="Sample spot prices">
+  <div class="tape-track">
+    <div class="tape-set"><span><b>GOLD</b>$3993.30/oz</span><span><b>SILVER</b>$51.80/oz</span><span><b>PLATINUM</b>$1538.10/oz</span><span><b>PALLADIUM</b>$1038.00/oz</span><span><b>COPPER</b>$6.27/lb</span><span><b>GOLD</b>$3993.30/oz</span><span><b>SILVER</b>$51.80/oz</span><span><b>PLATINUM</b>$1538.10/oz</span><span><b>PALLADIUM</b>$1038.00/oz</span><span><b>COPPER</b>$6.27/lb</span></div>
+    <div class="tape-set" aria-hidden="true"><span><b>GOLD</b>$3993.30/oz</span><span><b>SILVER</b>$51.80/oz</span><span><b>PLATINUM</b>$1538.10/oz</span><span><b>PALLADIUM</b>$1038.00/oz</span><span><b>COPPER</b>$6.27/lb</span><span><b>GOLD</b>$3993.30/oz</span><span><b>SILVER</b>$51.80/oz</span><span><b>PLATINUM</b>$1538.10/oz</span><span><b>PALLADIUM</b>$1038.00/oz</span><span><b>COPPER</b>$6.27/lb</span></div>
+  </div>
+  <div class="tape-note">Sample prices</div>
+</div>
+
+<header class="wrap nav">
+  <a class="brand" href="#top" id="top">
+    <span class="brand-mark" aria-hidden="true">Au</span>
+    <span class="brand-name">Aurum Vault</span>
+  </a>
+  <nav class="nav-links" aria-label="Pages">
+    <a href="#top" data-nav="home">Overview</a>
+    <a href="#tour">Tour</a>
+    <a href="#plans" data-nav="plans">Plans</a>
+  </nav>
+  <a class="btn btn-gold btn-sm" href="#get">Get the app</a>
+</header>
+
+<main>
+<!-- ══ Overview ══ -->
+<div id="view-home">
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-head">
+      <h1 class="sr-only">Aurum Vault</h1>
+      <div class="hero-copy">
+        <p>The essential tool for all precious metal investors, collectors and stackers. Aurum Vault provides every tool to track your portfolio and keep in touch with market movements, on your phone, tablet and desktop.</p>
+        <div class="cta-row">
+          <a class="btn btn-gold" href="#get">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg>
+            iPhone &amp; iPad
+          </a>
+          <a class="btn btn-line" href="#get">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg>
+            Android / Google Play
+          </a>
+          <a class="btn btn-line" href="#get">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="1.5"/><path d="M8 21h8M12 17v4"/></svg>
+            Windows &amp; Mac
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="bench">
+      <div class="scene">
+        <!-- Desktop -->
+        <a class="dev dev-desk f-desk" href="#tour" data-dev="desktop" aria-label="See the desktop app in the tour">
+          <span class="dev-label">Desktop</span>
+          <div class="bezel">
+            <div class="screen">
+              <img class="real-shot" src="shots/desktop-vault.webp" alt="Aurum Vault desktop app showing a portfolio worth over $260,000" decoding="async">
+            </div>
+          </div>
+          <div class="neck"></div>
+          <div class="foot"></div>
+        </a>
+
+        <!-- iPad -->
+        <a class="dev dev-pad f-pad" href="#tour" data-dev="ipad" aria-label="See the iPad app in the tour">
+          <span class="dev-label">Tablet</span>
+          <div class="bezel">
+            <div class="screen">
+              <img class="real-shot" src="shots/ipad-vault.webp" alt="Aurum Vault on iPad showing the list of portfolios" decoding="async">
+            </div>
+          </div>
+        </a>
+
+        <!-- iPhone -->
+        <a class="dev dev-phone f-phone" href="#tour" data-dev="iphone" aria-label="See the iPhone app in the tour">
+          <span class="dev-label">Phone</span>
+          <div class="bezel">
+            <div class="screen">
+              <img class="real-shot" src="shots/iphone-vault.webp" alt="Aurum Vault on iPhone showing a gold coin portfolio" decoding="async">
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="bench-labels">
+        <a href="#tour" data-dev="desktop"><b>See it on desktop<span>→</span></b><span class="s">Windows and macOS. Bulk imports, reports, full charts.</span></a>
+        <a href="#tour" data-dev="ipad"><b>See it on iPad<span>→</span></b><span class="s">Room to browse holdings and research the market.</span></a>
+        <a href="#tour" data-dev="iphone"><b>See it on iPhone<span>→</span></b><span class="s">Spot prices and price alerts wherever you are.</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ Tour ══ -->
+<section class="section gt-section" id="tour">
+  <div class="gt-wrap">
+    <div class="gt-head">
+      <div class="sec-head">
+        <span class="eyebrow">Take the tour</span>
+        <h2>Click through the <em>real app.</em></h2>
+        <p>Pick a page from the menu to see it, with what it does alongside. Every screen is from the app, filled with sample portfolios.</p>
+      </div>
+      <div class="seg" role="group" aria-label="Device">
+        <button type="button" data-gt-dev="desktop" aria-pressed="true">Desktop</button>
+        <button type="button" data-gt-dev="ipad" aria-pressed="false">iPad</button>
+        <button type="button" data-gt-dev="iphone" aria-pressed="false">iPhone</button>
+      </div>
+    </div>
+    <div class="gt" id="gt">
+      <nav class="gt-menu" aria-label="App pages"><ol id="gt-menu"></ol></nav>
+      <div class="gt-stage" id="gt-stage"></div>
+      <aside class="gt-info" id="gt-info" aria-live="polite">
+        <div class="gt-count"><span class="eyebrow" id="gt-count"></span><span class="gt-tag" id="gt-tag" hidden>Premium</span></div>
+        <h3 id="gt-title"></h3>
+        <p class="gt-lede" id="gt-lede"></p>
+        <ul class="gt-points" id="gt-points"></ul>
+        <div class="gt-nav">
+          <button type="button" class="btn btn-line btn-sm" id="gt-prev"></button>
+          <button type="button" class="btn btn-gold btn-sm" id="gt-next"></button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="plans">
+  <div class="wrap">
+    <div class="plans-head">
+      <div class="sec-head">
+        <span class="eyebrow">Plans</span>
+        <p>Premium and Platinum both start with a 7-day free trial. Cancel any time.</p>
+      </div>
+      <div class="seg" role="group" aria-label="Billing period">
+        <button type="button" id="cycle-month" data-cycle="month" aria-pressed="false">Monthly</button>
+        <button type="button" id="cycle-year" data-cycle="year" aria-pressed="true">Yearly · save 30%</button>
+      </div>
+    </div>
+    <div class="price-grid">
+      <article class="pcard">
+        <span class="pname">FREE</span>
+        <div class="price"><b>$0</b></div>
+        <ul class="feats">
+          <li>Live gold and silver prices</li>
+          <li>1 portfolio, up to 10 items</li>
+          <li>Basic price calculator</li>
+          <li>Basic charts (metal prices only)</li>
+          <li>3 Market Alerts</li>
+          <li>Premium Analyser</li>
+        </ul>
+        <div class="act"><a class="btn btn-line" href="#get">Download free</a></div>
+      </article>
+      <article class="pcard">
+        <span class="pname">PREMIUM</span>
+        <div class="price"><b data-price="premium">$49.99</b><span data-per="premium">/year</span></div>
+        <ul class="feats">
+          <li>Everything in Free</li>
+          <li>No ads</li>
+          <li>Unlimited portfolios and items</li>
+          <li>Unlimited Alerts with text and email delivery</li>
+          <li>Tax / Jurisdiction Rules</li>
+          <li>What If Analysis</li>
+          <li>Add Custom Items</li>
+          <li>Advanced Charts, including ratio charts</li>
+          <li>Export/Import via CSV, XL, PDF</li>
+        </ul>
+        <div class="act">
+          <a class="btn btn-gold" href="#get">Try 7 days free</a>
+          <p class="trial" data-trial="premium">7 days free, then $49.99/year. Cancel any time.</p>
+        </div>
+      </article>
+      <article class="pcard">
+        <span class="pname">PLATINUM</span>
+        <div class="price"><b data-price="platinum">$99.99</b><span data-per="platinum">/year</span></div>
+        <ul class="feats">
+          <li>Everything in Premium</li>
+          <li>Sync Desktop, Phone and iPad apps</li>
+          <li>Cloud backup, including item photos</li>
+        </ul>
+        <div class="act">
+          <a class="btn btn-gold" href="#get">Try 7 days free</a>
+          <p class="trial" data-trial="platinum">7 days free, then $99.99/year. Cancel any time.</p>
+        </div>
+      </article>
+    </div>
+    <div class="plans-note">
+      <span>Free shows ads. Premium and Platinum have no ads.</span>
+      <span>No account needed on Free or Premium. Platinum users sign in once to sync.</span>
+    </div>
+  </div>
+</section>
+</div>
+
+<section class="closing" id="get">
+  <div class="wrap">
+    <div class="closing-inner">
+      <h2>Open your <em>vault.</em></h2>
+      <div class="cta-row">
+        <a class="btn btn-gold" href="#get">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg>
+          iPhone &amp; iPad
+        </a>
+        <a class="btn btn-line" href="#get">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg>
+          Android / Google Play
+        </a>
+        <a class="btn btn-line" href="#get">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="1.5"/><path d="M8 21h8M12 17v4"/></svg>
+          Windows &amp; Mac
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot-links">
+    <span>Contact: <a href="mailto:getaurumvault@gmail.com">getaurumvault@gmail.com</a></span>
+    <a href="privacy.html">Privacy Policy</a>
+  </div>
+  <div class="wrap foot">
+    <span>© 2026 Aurum Vault</span>
+    <span>Prices and holdings on this page are samples. In the app, prices come from live market feeds.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  /* ── Tax card language toggle (overview) ── */
+  var copy = {
+    en: {
+      vat: ["SALES TAX / VAT", "Investment gold is VAT-exempt under the EU directive. Silver and platinum carry 20% VAT."],
+      cgt: ["CAPITAL GAINS TAX", "Gains on precious metals are taxed at 27.5%. Assets bought before 31 March 2012 are exempt."],
+      sell: ["WHEN SELLING", "Private individuals can sell without a licence. Commercial dealers must register under anti-money-laundering rules."]
+    },
+    de: {
+      vat: ["MWST.", "Anlagegold ist MwSt.-befreit (EU-Richtlinie). Silber und Platin: 20 % MwSt."],
+      cgt: ["KAPITALERTRAGSTEUER", "Veräußerungsgewinne aus Edelmetallen werden mit 27,5 % besteuert. Vor dem 31. März 2012 erworbene Vermögenswerte sind steuerfrei."],
+      sell: ["BEIM VERKAUF", "Privatpersonen können ohne Lizenz verkaufen. Gewerbliche Händler müssen sich nach den Geldwäschevorschriften registrieren."]
+    }
+  };
+  var langButtons = document.querySelectorAll(".lang button");
+  langButtons.forEach(function (b) {
+    b.addEventListener("click", function () {
+      var lang = b.getAttribute("data-lang");
+      langButtons.forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      Object.keys(copy[lang]).forEach(function (k) {
+        document.querySelector('[data-k="' + k + '"]').textContent = copy[lang][k][0];
+        document.querySelector('[data-v="' + k + '"]').textContent = copy[lang][k][1];
+      });
+      document.getElementById("rule-body").lang = lang;
+    });
+  });
+
+  /* ── Plans: same wording as lib/billing/my_plan_page.dart (shared by the overview cards and the My Plan mock) ── */
+  var PLANS = {
+    free: { name: "Free", feats: [["y", "Live gold and silver prices"], ["y", "1 portfolio, up to 10 items"], ["y", "Basic price calculator"], ["y", "Basic charts (metal prices only)"], ["y", "3 Market Alerts"], ["y", "Premium Analyser"]] },
+    premium: { name: "Premium", year: "$49.99", month: "$5.99", feats: [["y", "Everything in Free"], ["y", "No ads"], ["y", "Unlimited portfolios and items"], ["y", "Unlimited Alerts with text and email delivery"], ["y", "Tax / Jurisdiction Rules"], ["y", "What If Analysis"], ["y", "Add Custom Items"], ["y", "Advanced Charts, including ratio charts"], ["y", "Export/Import via CSV, XL, PDF"]] },
+    platinum: { name: "Platinum", year: "$99.99", month: "$11.99", feats: [["y", "Everything in Premium"], ["y", "Sync Desktop, Phone and iPad apps"], ["y", "Cloud backup, including item photos"]] }
+  };
+  function per(cycle) { return cycle === "year" ? "/year" : "/month"; }
+  function trialText(k, cycle) { return "7 days free, then " + PLANS[k][cycle] + per(cycle) + ". Cancel any time."; }
+
+  var cycleButtons = document.querySelectorAll("[data-cycle]");
+  cycleButtons.forEach(function (b) {
+    b.addEventListener("click", function () {
+      var cycle = b.getAttribute("data-cycle");
+      cycleButtons.forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      ["premium", "platinum"].forEach(function (k) {
+        document.querySelector('[data-price="' + k + '"]').textContent = PLANS[k][cycle];
+        document.querySelector('[data-per="' + k + '"]').textContent = per(cycle);
+        document.querySelector('[data-trial="' + k + '"]').textContent = trialText(k, cycle);
+      });
+    });
+  });
+
+  var PLAN_NOTE = {
+    plan: "Free users who tap a Premium tool are sent here, with a gold line at the top naming it, for example “Tax / Jurisdiction Rules is a Premium feature.”",
+    vault: "Free: 1 portfolio, up to 10 items. Premium and Platinum: unlimited portfolios and items.",
+    portfolio: "Free: up to 10 items. Premium and Platinum: unlimited items, plus import and export as CSV, Excel or PDF.",
+    calculator: "The basic price calculator is included in Free.",
+    converter: "Included on every plan.",
+    premium: "Free can open and use it. Saving a named list and exporting it (PDF, XLS, CSV) need Premium.",
+    charts: "Free: single-metal charts, ranges up to 1M, in USD, as a line. Ratio charts, candles, longer ranges and other currencies need Premium. On Free a ratio chart shows as a blurred preview with “Ratio charts are a Premium feature.”",
+    alerts: "Free: 3 Market Alerts, sent as notifications. Premium: unlimited alerts, email and text delivery, and alerts on a percentage move.",
+    tax: "Premium and Platinum. On Free, tapping it opens My Plan with the line “Tax / Jurisdiction Rules is a Premium feature.”"
+  };
+
+  var ICON = {
+    plan: '<circle cx="12" cy="9" r="6"/><path d="M8.5 13.8L7 22l5-3 5 3-1.5-8.2"/>',
+    vault: '<path d="M3 7h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 7l12-3.5V7M16 13.5h2"/>',
+    calculator: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h1M12 11h1M16 11h0M8 15h1M12 15h1M16 15v2.5M8 18h1M12 18h1"/>',
+    converter: '<path d="M4 8h15M15 4l4 4-4 4M20 16H5M9 12l-4 4 4 4"/>',
+    premium: '<path d="M19 5L5 19"/><circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="17" r="2.5"/>',
+    charts: '<path d="M3 17l6-6 4 4 8-8"/>',
+    alerts: '<path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+    news: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/>',
+    tax: '<path d="M14.5 3.5l6 6M9.5 8.5l6 6M12 6l-7.5 7.5 2 2L14 8M3 21h10"/>',
+    menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+    back: '<path d="M15 4l-8 8 8 8"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+    refresh: '<path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"/>',
+    settings: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9L7 7M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
+    share: '<path d="M12 3v12M8 7l4-4 4 4"/><path d="M7 11H5v10h14V11h-2"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>',
+    right: '<path d="M9 6l6 6-6 6"/>',
+    down: '<path d="M6 9l6 6 6-6"/>',
+    search: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
+    candle: '<path d="M7 3v18M17 5v14"/><rect x="5" y="7" width="4" height="8"/><rect x="15" y="9" width="4" height="6"/>',
+    tool: '<path d="M14.5 5.5a4 4 0 0 0 5 5L11 19l-3-3 8.5-8.5a4 4 0 0 1-2-2z"/>',
+    star: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+    ladd: '<path d="M4 6h11M4 11h11M4 16h7M17 13v7M13.5 16.5h7"/>',
+    save: '<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v5h7V3M8 21v-7h8v7"/>',
+    close: '<path d="M6 6l12 12M18 6L6 18"/>',
+    cal: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+    up: '<path d="M6 15l6-6 6 6"/>',
+    bellon: '<path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0M3 4l2 2M21 4l-2 2"/>',
+    clear: '<path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"/>'
+  };
+  function ic(id) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[id] + '</svg>'; }
+
+  // The app's menu, in the app's order. Metal & Coin Info and Compare Prices are switched off in
+  // the app (_showMetalCoinInfoEntry / _showComparePricesEntry), so they are not shown here either.
+  var SCREENS = [
+    { id: "vault", name: "Vault", menu: "Vault (Home)", tab: "Vault", bar: "AURUM VAULT" },
+    { id: "portfolio", name: "Inside a portfolio", bar: "AURUM VAULT" },
+    { id: "calculator", name: "Price Calculator", tab: "Price Calculator", bar: "PRICE CALCULATOR" },
+    { id: "converter", name: "Metal Converter", bar: "METAL CONVERTER" },
+    { id: "premium", name: "Premium Analyser", bar: "PREMIUM ANALYSER" },
+    { id: "charts", name: "Market Charts", tab: "Charts", bar: "MARKET CHARTS" },
+    { id: "alerts", name: "Alerts", bar: "ALERTS" },
+    { id: "news", name: "News", tab: "News", bar: "NEWS" },
+    { id: "tax", name: "Tax / Jurisdiction Rules", bar: "TAX / JURISDICTION RULES" }
+  ];
+  function scrById(id) { return SCREENS.filter(function (s) { return s.id === id; })[0]; }
+  var TABS = ["vault", "calculator", "charts", "news"];
+
+  var DEVICES = {
+    desktop: {
+      name: "Desktop", label: "Windows & macOS", tipK: "On desktop", frame: "f-desk", cls: "d-desk",
+      intro: "The full app on Windows and macOS. The menu stays open down the left side, and live spot prices run along a ticker under the title.",
+      hint: "Click any item in the menu on the left. On Vault, click a portfolio to open it."
+    },
+    ipad: {
+      name: "iPad", label: "iPadOS", tipK: "On iPad", frame: "f-pad", cls: "d-pad",
+      intro: "On iPad the app works like it does on iPhone, with more room. The four main screens sit along the bottom, and everything else is in the menu behind the ☰ button.",
+      hint: "Tap the tabs along the bottom, or ☰ for every other screen."
+    },
+    iphone: {
+      name: "iPhone", label: "iOS", tipK: "On iPhone", frame: "f-phone", cls: "d-phone",
+      intro: "On iPhone the four screens you use most sit along the bottom. Everything else is in the menu behind the ☰ button.",
+      hint: "Tap the tabs along the bottom, or ☰ for every other screen."
+    }
+  };
+
+  var DESC = {
+    plan: {
+      lede: "One page shows all three plans so you can compare them and start a trial. It opens from “My Plan” at the top of the menu.",
+      points: [
+        "The menu line shows your plan: “My Plan: Free” with a gold Upgrade button, or “Manage” on Premium and Platinum.",
+        "Switch between Monthly and Yearly prices. Yearly is picked first.",
+        "Each card lists what the plan includes, with ✓ or ✕ for each feature. Your current plan has a gold border and a “Your plan” label.",
+        "Premium and Platinum start with a 7-day free trial. Restore purchases, Terms and Privacy Policy sit at the bottom."
+      ],
+      tip: {
+        desktop: "The page opens over the whole window with the three cards side by side. The back arrow returns you to where you were.",
+        ipad: "The iPad is wide enough for the three cards to sit side by side.",
+        iphone: "The cards stack one under another and the page scrolls."
+      }
+    },
+    vault: {
+      lede: "Your home screen. A total for everything you own, then a list of your portfolios.",
+      points: [
+        "The top card shows the vault total, what you paid, and your profit or loss in dollars and percent. “Average cost per oz” opens to show it for each metal.",
+        "Keep separate portfolios, such as US Gold Coins, Junk Silver and Collectible Coins. Each row shows its value, cost and P&L.",
+        "Switch the list between Portfolios, Metals and Type. The + button adds a portfolio and the pencil edits several items at once.",
+        "Open a portfolio to see its own total, with its items grouped by Metal or Type, or listed one by one under All Items."
+      ],
+      tip: {
+        desktop: "Everything is on one screen: the totals, the value chart and every portfolio.",
+        ipad: "Home has two tabs. PRICES shows live spot prices with a small chart, and MY PORTFOLIOS shows this list.",
+        iphone: "Home has two tabs: PRICES for spot prices and MY PORTFOLIOS for this list. Tap a portfolio to open it."
+      }
+    },
+    portfolio: {
+      lede: "Open a portfolio to see what is in it and how it has done since you started it.",
+      points: [
+        "The top card shows the portfolio's value, what you paid, and your profit or loss in dollars and percent.",
+        "The value history chart runs from the day you opened the portfolio. Pick a range from 1D to MAX, or set your own dates.",
+        "Group the holdings by Metal or Type, or list every item with its quantity, value, cost, premium paid and P&L.",
+        "The + button adds an item, and the pencil edits it."
+      ],
+      tip: {
+        desktop: "Every item is listed under the chart, with its own value, cost and P&L.",
+        ipad: "This shows the holdings grouped by metal. Switch to Items to see every coin.",
+        iphone: "The numbers for each holding sit under its name, so nothing is cut off."
+      }
+    },
+    calculator: {
+      lede: "Price any coin, bar or piece of jewelry before you buy it.",
+      points: [
+        "Search by name, or browse by Metal, Category, Country and Item.",
+        "Enter a quantity (a weight for jewelry) and a premium %. The card shows the pure metal, unit cost, total premium and total cost.",
+        "Add it to a list. The list keeps a running total, and can be shared, exported to CSV or XLS, or saved by name."
+      ],
+      tip: {
+        desktop: "Keep a saved list open while you work through a dealer's catalog.",
+        ipad: "Handy on a coin show table: build the list as you go and see the running total.",
+        iphone: "Price a coin in a few taps while you're standing at the counter."
+      }
+    },
+    converter: {
+      lede: "Work out what an amount of one metal, coin or currency is worth in another.",
+      points: [
+        "Convert from a metal or a currency. For a metal, pick gold, silver, platinum or palladium, then Bullion, Coins or Jewelry.",
+        "Coins come from the app's coin catalogue, with a search box. Jewelry asks for the karat, from 9k to 24k.",
+        "Enter a number of coins, a weight, or an amount of money.",
+        "Convert to another metal or to one of 8 currencies, then share the result."
+      ],
+      tip: {
+        desktop: "Everything fits on one screen, from the first choice to the result.",
+        ipad: "Handy at a coin show to compare two coins, or a coin against cash.",
+        iphone: "Work out a swap or a cash offer at the counter."
+      }
+    },
+    premium: {
+      lede: "Find out how much over the metal value you paid, and what spot has to reach for you to break even.",
+      points: [
+        "Pick an item, then enter what you paid, the quantity, and the date you bought it (or the spot price per oz at the time).",
+        "See the metal price on that date, the melt value then, the premium you paid, today's melt value and your break-even price per oz.",
+        "Save items to a Premium List to see the total paid, premium % and current melt together."
+      ],
+      tip: {
+        desktop: "Compare a whole list of products at once before you place an order.",
+        ipad: "Check quotes from several dealers as they come in.",
+        iphone: "Type in the price on the dealer's tag and see the premium straight away."
+      }
+    },
+    charts: {
+      lede: "Price history for gold, silver, platinum and palladium, plus ratio charts.",
+      points: [
+        "Pick a metal or a ratio from the box at the top: gold against silver, platinum, copper, oil, the S&P 500 or the Dow.",
+        "Choose the currency, and a range from one day to the full history: 1D, 5D, 1W, 1M, 3M, 1Y, 3Y, 5Y, 10Y and MAX.",
+        "Show the price as a line or as candles.",
+        "Open the tools to add a moving average (DMA) or draw trend lines."
+      ],
+      tip: {
+        desktop: "The chart runs the full width of the window, so long ranges are easy to read.",
+        ipad: "Pinch to zoom into any stretch of the chart.",
+        iphone: "Pinch to zoom, and switch metals from the box at the top."
+      }
+    },
+    alerts: {
+      lede: "Get told when the market moves, without watching it all day.",
+      points: [
+        "Alert on a metal price above or below a target, a daily price at a set time, or a percentage move.",
+        "Or alert on your portfolio: its value or its return.",
+        "Each alert shows whether it is watching, triggered or off. Switch it on or off, edit it, or delete it.",
+        "Alerts are checked while the app is open. On iPhone and iPad they arrive as notifications."
+      ],
+      tip: {
+        desktop: "A triggered alert shows in the app, with a red dot next to Alerts in the menu.",
+        ipad: "See every alert and switch them on or off in one list.",
+        iphone: "Alerts arrive as notifications, so you'll know even when the app is closed."
+      }
+    },
+    news: {
+      lede: "Precious metals headlines in one feed.",
+      points: [
+        "Each story is tagged Gold, Silver, Platinum, Palladium, Macro or Mining, with its source and how long ago it was posted.",
+        "Tap a story to read the full article.",
+        "Pull down to refresh."
+      ],
+      tip: {
+        desktop: "Read the feed next to your holdings.",
+        ipad: "News is one of the four tabs along the bottom.",
+        iphone: "News is one of the four tabs, so it's always one tap away."
+      }
+    },
+    tax: {
+      lede: "The rules that apply when you buy, hold and sell metals where you live.",
+      points: [
+        "Pick a country. For the United States, also pick a state to see the federal and state rules.",
+        "Each card covers sales tax / VAT / GST, capital gains tax, legal requirements when selling and reporting requirements. Tap a heading to open it.",
+        "Tax-free and exempt lines are listed first.",
+        "For countries with their own language, one tap translates the rules."
+      ],
+      tip: {
+        desktop: "Read the full rules for a country before you plan a large sale.",
+        ipad: "Pull up local rules while you talk to a dealer or adviser.",
+        iphone: "Check the rules on the spot when you travel."
+      }
+    }
+  };
+
+  /* ── Tour: menu on the left, real screen in the middle, description on the right ── */
+  var SHOTS = { desktop: "Desktop", ipad: "iPad", iphone: "iPhone" };
+  var FRAME = { desktop: "f-desk", ipad: "f-pad", iphone: "f-phone" };
+  var PREMIUM_ONLY = {};
+  var gt = { dev: "desktop", scr: "vault" };
+  var menuEl = document.getElementById("gt-menu"), stageEl = document.getElementById("gt-stage"), infoEl = document.getElementById("gt-info");
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function esc(t) { return String(t).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;"); }
+  function src(dev, id) { return "shots/" + dev + "-" + id + ".webp"; }
+
+  menuEl.innerHTML = SCREENS.map(function (S, i) {
+    return '<li><button type="button" data-gt-scr="' + S.id + '">' + ic(S.id === "portfolio" ? "vault" : S.id) +
+      '<span>' + esc(S.name) + '</span>' + (PREMIUM_ONLY[S.id] ? '<em>Premium</em>' : '') + '</button></li>';
+  }).join("");
+
+  function buildFrame(dev) {
+    stageEl.innerHTML = '<div class="gt-frame ' + FRAME[dev] + '"><div class="bezel"><div class="screen"><img class="real-shot" id="gt-img" alt="" decoding="async"><button type="button" class="zoom-btn" aria-label="Expand image" title="Expand image"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7"/></svg></button></div></div>' +
+      (dev === "desktop" ? '<div class="neck"></div><div class="foot"></div>' : '') + '</div>';
+    stageEl.className = "gt-stage is-" + dev;
+    document.querySelectorAll("[data-gt-dev]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-gt-dev") === dev)); });
+    // load the rest of this device's screens so clicking through is instant
+    SCREENS.forEach(function (S) { var im = new Image(); im.src = src(dev, S.id); });
+  }
+
+  function show(dev, scr, animate) {
+    var idx = SCREENS.map(function (S) { return S.id; }).indexOf(scr);
+    if (idx < 0) { idx = 0; scr = SCREENS[0].id; }
+    if (dev !== gt.dev || !document.getElementById("gt-img")) buildFrame(dev);
+    gt.dev = dev; gt.scr = scr;
+    var S = SCREENS[idx], T = DESC[scr], img = document.getElementById("gt-img");
+    img.src = src(dev, scr);
+    img.alt = "Aurum Vault " + S.name + " page on " + SHOTS[dev];
+    menuEl.querySelectorAll("[data-gt-scr]").forEach(function (b) {
+      if (b.getAttribute("data-gt-scr") === scr) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+    });
+    document.getElementById("gt-count").textContent = "Page " + (idx + 1) + " of " + SCREENS.length + " · " + SHOTS[dev];
+    document.getElementById("gt-tag").hidden = !PREMIUM_ONLY[scr];
+    document.getElementById("gt-title").textContent = S.name;
+    document.getElementById("gt-lede").textContent = T.lede;
+    document.getElementById("gt-points").innerHTML = T.points.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("");
+    var prev = SCREENS[(idx + SCREENS.length - 1) % SCREENS.length], next = SCREENS[(idx + 1) % SCREENS.length];
+    var pb = document.getElementById("gt-prev"), nb = document.getElementById("gt-next");
+    pb.textContent = "← " + prev.name; pb.setAttribute("data-gt-scr", prev.id);
+    nb.textContent = next.name + " →"; nb.setAttribute("data-gt-scr", next.id);
+    if (animate && !reduce) {
+      [img, infoEl].forEach(function (el) { el.classList.remove("gt-swap"); void el.offsetWidth; el.classList.add("gt-swap"); });
+    }
+  }
+
+  document.getElementById("gt").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-gt-scr]");
+    if (!b) return;
+    show(gt.dev, b.getAttribute("data-gt-scr"), true);
+    // on narrow screens the description sits under the picture, so bring the picture back into view
+    if (b.closest(".gt-nav") && window.innerWidth < 1100) stageEl.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    var cur = menuEl.querySelector('[aria-current="page"]');
+    if (cur && cur.scrollIntoView && window.innerWidth < 1100) cur.scrollIntoView({ block: "nearest", inline: "center" });
+  });
+  document.querySelectorAll("[data-gt-dev]").forEach(function (b) {
+    b.addEventListener("click", function () { show(b.getAttribute("data-gt-dev"), gt.scr, true); });
+  });
+  document.getElementById("gt").addEventListener("keydown", function (e) {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    var idx = SCREENS.map(function (S) { return S.id; }).indexOf(gt.scr);
+    var n = SCREENS[(idx + (e.key === "ArrowRight" ? 1 : SCREENS.length - 1)) % SCREENS.length];
+    show(gt.dev, n.id, true);
+    var mb = menuEl.querySelector('[data-gt-scr="' + n.id + '"]');
+    if (mb && e.target.closest(".gt-menu")) mb.focus();
+  });
+  // Links elsewhere on the page ("See it on iPad", the tool list ...) open the tour on that device and page.
+  document.querySelectorAll('a[href="#tour"][data-dev]').forEach(function (a) {
+    a.addEventListener("click", function () { show(a.getAttribute("data-dev"), a.getAttribute("data-scr") || "vault", false); });
+  });
+  show("desktop", "vault", false);
+})();
+</script>
+
+<dialog class="lightbox" id="lightbox" aria-label="Expanded image">
+  <button type="button" class="lb-close" aria-label="Close">&times;</button>
+  <figure><img id="lb-img" alt=""><figcaption id="lb-cap"></figcaption></figure>
+</dialog>
+<script>
+(function () {
+  var ZOOM = '<button type="button" class="zoom-btn" aria-label="Expand image" title="Expand image"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7"/></svg></button>';
+  // an expand button on every screenshot on the page
+  document.querySelectorAll(".screen").forEach(function (sc) {
+    if (sc.querySelector("img.real-shot") && !sc.querySelector(".zoom-btn")) sc.insertAdjacentHTML("beforeend", ZOOM);
+  });
+  var box = document.getElementById("lightbox"), img = document.getElementById("lb-img"), cap = document.getElementById("lb-cap");
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest(".zoom-btn");
+    if (!b) return;
+    // the screenshots sit inside links to the tour; the button only expands
+    e.preventDefault(); e.stopPropagation();
+    var shot = b.parentNode.querySelector("img.real-shot");
+    img.src = shot.currentSrc || shot.src;
+    img.alt = shot.alt;
+    cap.textContent = shot.alt;
+    if (box.showModal) box.showModal(); else box.setAttribute("open", "");
+  }, true);
+  function close() { if (box.close) box.close(); else box.removeAttribute("open"); }
+  box.querySelector(".lb-close").addEventListener("click", close);
+  // click anywhere outside the picture closes it
+  box.addEventListener("click", function (e) { if (e.target === box) close(); });
+})();
+</script>
+
+<dialog class="soon" id="soon" aria-labelledby="soon-title">
+  <h2 id="soon-title">Coming soon</h2>
+  <p id="soon-text">Coming to the App Store in the near future.</p>
+  <button type="button" class="btn btn-gold" id="soon-ok">OK</button>
+</dialog>
+<script>
+(function () {
+  var box = document.getElementById("soon"), text = document.getElementById("soon-text");
+  function store(label) {
+    if (/android/i.test(label)) return "Google Play";
+    if (/windows/i.test(label)) return "the Microsoft Store and the Mac App Store";
+    return "the App Store";
+  }
+  // every download button (top of the page and the "Open your vault" section)
+  document.querySelectorAll(".cta-row a.btn").forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      text.textContent = "Coming to " + store(a.textContent) + " in the near future.";
+      if (box.showModal) box.showModal(); else box.setAttribute("open", "");
+      document.getElementById("soon-ok").focus();
+    });
+  });
+  function close() { if (box.close) box.close(); else box.removeAttribute("open"); }
+  document.getElementById("soon-ok").addEventListener("click", close);
+  box.addEventListener("click", function (e) { if (e.target === box) close(); });
+})();
+</script>
+</body>
+</html>

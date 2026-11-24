@@ -2,111 +2,116 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230E0D0B' stroke='%23C5A059' stroke-width='3'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-style='italic' font-size='28' fill='%23C5A059' text-anchor='middle'%3EAu%3C/text%3E%3C/svg%3E">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Terms of Use · Aurum Vault</title>
 <meta name="description" content="Terms of Use for Aurum Vault — a tracker for precious metals you already own.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=Hanken+Grotesk:wght@400;500;600&display=swap">
 <style>
-  :root{--gold:#d4a017;--bg:#0b0e14;--card:#11141d;--ink:#e8e6df;--mut:#9aa0ae;--line:#232838}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-  a{color:var(--gold)}
-  .wrap{max-width:760px;margin:0 auto;padding:0 20px 64px}
-  header{padding:28px 0 8px;display:flex;align-items:center;gap:12px}
-  header img{width:40px;height:40px;border-radius:10px}
-  header b{font-size:18px}
-  header span{color:var(--mut);font-size:14px}
-  .back{display:inline-block;margin:18px 0 6px;color:var(--mut);text-decoration:none}
-  .back:hover{color:var(--ink)}
-  .label{color:var(--gold);text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:700;margin:18px 0 6px}
-  h1{font-size:34px;line-height:1.15;margin:0 0 8px}
-  .meta{color:var(--mut);margin:0 0 8px}
-  .intro{font-size:18px;color:#cfd2da}
-  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
-  h2{font-size:19px;margin:0 0 8px}
-  p{margin:0 0 10px}
-  p:last-child{margin-bottom:0}
-  ul{margin:0 0 10px;padding-left:20px}
-  li{margin:4px 0}
-  footer{border-top:1px solid var(--line);margin-top:36px;padding-top:18px;color:var(--mut);font-size:14px;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:space-between}
-  .foot-links{display:flex;gap:18px;flex-wrap:wrap}
-  .foot-links a{color:var(--mut);text-decoration:none}
-  .foot-links a:hover{color:var(--ink)}
+:root {
+  --ink: #0E0D0B; --ink-2: #16140F; --line: #2C281E;
+  --gold: #C5A059; --gold-hi: #E6CC8F; --text: #EDE7D9; --muted: #B9AF9A;
+  --f-display: "Bodoni Moda", "Didot", Georgia, serif;
+  --f-body: "Hanken Grotesk", "Segoe UI", system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--ink); color: var(--text); font-family: var(--f-body); font-size: 1.02rem; line-height: 1.65; }
+.wrap { max-width: 760px; margin-inline: auto; padding-inline: 16px; }
+header { border-bottom: 1px solid var(--line); padding-block: 1.1rem; }
+header .wrap { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; max-width: 1180px; }
+.brand { display: flex; align-items: center; gap: 0.7rem; color: var(--text); text-decoration: none; font-family: var(--f-display); font-size: 1.25rem; }
+.brand-mark { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--gold); color: var(--gold); display: grid; place-items: center; font-style: italic; font-size: 1rem; }
+.back { color: var(--gold); text-decoration: none; font-size: 0.95rem; }
+.back:hover { color: var(--gold-hi); text-decoration: underline; }
+main { padding-block: clamp(2rem, 6vw, 4rem) 3rem; }
+.eyebrow { font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(2rem, 1.5rem + 2.4vw, 3rem); line-height: 1.1; margin: 0.5rem 0 0.4rem; }
+.date { color: var(--muted); margin: 0 0 2rem; }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.65rem); line-height: 1.2; margin: 2.4rem 0 0.7rem; padding-top: 1.4rem; border-top: 1px solid var(--line); }
+h3 { font-size: 1.05rem; font-weight: 600; margin: 1.4rem 0 0.4rem; }
+p, li { color: var(--text); }
+p { margin: 0 0 1rem; }
+ul { margin: 0 0 1rem; padding-left: 1.3rem; }
+li { margin-bottom: 0.45rem; }
+li::marker { color: var(--gold); }
+a { color: var(--gold); }
+a:hover { color: var(--gold-hi); }
+.summary { background: var(--ink-2); border: 1px solid var(--line); border-radius: 12px; padding: 1.1rem 1.3rem; }
+.summary p:last-child, .summary ul:last-child { margin-bottom: 0; }
+footer { border-top: 1px solid var(--line); padding-block: 1.6rem 2.2rem; color: var(--muted); font-size: 0.9rem; }
+footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem 2rem; max-width: 1180px; }
+footer a { overflow-wrap: anywhere; }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <img src="shots/icon.png" alt="Aurum Vault icon">
-    <div><b>Aurum Vault</b><br><span>Track the gold &amp; silver you own</span></div>
-  </header>
-  <a class="back" href="index.html">&larr; Back to Aurum Vault</a>
-  <p class="label">Legal</p>
+<header>
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">Au</span>Aurum Vault</a>
+    <a class="back" href="index.html">&larr; Back to Aurum Vault</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <span class="eyebrow">Legal</span>
   <h1>Terms of Use</h1>
-  <p class="meta">Effective: 24 November 2026</p>
-  <p class="intro">These Terms of Use (&ldquo;Terms&rdquo;) are an agreement between you and Aurum Vault (&ldquo;Aurum Vault&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo; or &ldquo;our&rdquo;) for the Aurum Vault apps for iPhone, iPad, Android, Windows and macOS, and this website (together, the &ldquo;Service&rdquo;). By using the Service, you agree to these Terms. If you do not agree, do not use the Service.</p>
-  <section>
-    <h2>In short</h2>
-    <p>Aurum Vault is a tracker for precious metals you already own. You cannot buy, sell or trade metals in the app, and nothing in the app is financial advice. Paid plans are bought through the App Store and can be cancelled there at any time.</p>
-  </section>
-  <section>
-    <h2>1. What the Service does</h2>
-    <p>Aurum Vault helps you record and value precious-metal holdings that you own, using market prices, charts and tools such as the Premium Analyser. The Service is a tracking and information tool only.</p>
-  </section>
-  <section>
-    <h2>2. No buying, selling or trading</h2>
-    <p>You cannot buy, sell, trade, send or receive precious metals, money or any other asset through the Service. Links to outside dealers or news sites are for information only; anything you do on those sites is between you and them.</p>
-  </section>
-  <section>
-    <h2>3. Not financial advice</h2>
-    <p>Prices, charts, values and analysis in the Service are information only and are not financial, investment, tax or legal advice. Market prices come from third-party providers, may be delayed, and may occasionally be wrong or unavailable. Always check an independent source before making a financial decision. We are not responsible for decisions you make based on information in the Service.</p>
-  </section>
-  <section>
-    <h2>4. Your holdings and your account</h2>
-    <p>You are responsible for the accuracy of the holdings and other information you enter. Free and Premium keep your holdings on your device. Platinum includes sync and cloud backup and needs an account; you are responsible for keeping your password safe and for activity under your account. You can export or delete your holdings in the app at any time.</p>
-  </section>
-  <section>
-    <h2>5. Plans, subscriptions and payment</h2>
-    <ul>
-      <li><strong>Free:</strong> 1 portfolio, up to 10 items, no alerts. The Free plan may show ads.</li>
-      <li><strong>Premium:</strong> $5.99 per month or $49.99 per year. No ads.</li>
-      <li><strong>Platinum:</strong> $11.99 per month or $99.99 per year. No ads. Includes sync and cloud backup.</li>
-      <li><strong>Premium Lifetime:</strong> $99 one-time payment.</li>
-      <li><strong>Platinum Lifetime:</strong> $199 one-time payment.</li>
-    </ul>
-    <p>Subscriptions begin with a 7-day free trial. Payment is charged to your Apple Account when you confirm the purchase. Subscriptions renew automatically at the price shown unless you cancel at least 24 hours before the end of the current period. You can manage or cancel a subscription at any time in your App Store account settings; deleting the app does not cancel a subscription. Lifetime purchases are one-time payments and do not renew. Refunds are handled by Apple under its own policies.</p>
-  </section>
-  <section>
-    <h2>6. Acceptable use</h2>
-    <p>You agree not to misuse the Service, including trying to break its security, copying it except as the law allows, or using it for anything unlawful.</p>
-  </section>
-  <section>
-    <h2>7. Availability and changes</h2>
-    <p>We may change, suspend or stop parts of the Service, and we may update these Terms. When we make a significant change to these Terms, we will change the effective date at the top of this page and let you know in the app. Continuing to use the Service after a change means you accept the updated Terms.</p>
-  </section>
-  <section>
-    <h2>8. No warranty</h2>
-    <p>The Service is provided &ldquo;as is&rdquo; and &ldquo;as available&rdquo;. To the fullest extent allowed by law, we make no warranties that it will be uninterrupted, error-free, or that prices or other data will be accurate or complete.</p>
-  </section>
-  <section>
-    <h2>9. Limitation of liability</h2>
-    <p>To the fullest extent allowed by law, Aurum Vault will not be liable for indirect or consequential losses, or for losses arising from decisions you make using information in the Service. Nothing in these Terms limits liability that cannot be limited by law.</p>
-  </section>
-  <section>
-    <h2>10. Governing law</h2>
-    <p>These Terms are governed by the laws of the State of Tennessee, United States, without regard to its conflict-of-law rules.</p>
-  </section>
-  <section>
-    <h2>11. Contact us</h2>
-    <p>If you have any questions about these Terms, email us at <a href="mailto:support@aurumvault.info">support@aurumvault.info</a>.</p>
-  </section>
-  <footer>
+  <p class="date">Effective date: 24 November 2026</p>
+
+  <div class="summary">
+    <p><b>In short:</b> Aurum Vault is a tracker for precious metals you already own. You cannot buy, sell or trade metals in the app, and nothing in the app is financial advice. Paid plans are bought through the App Store and can be cancelled there at any time.</p>
+  </div>
+
+  <p style="margin-top:1.4rem">These Terms of Use (&ldquo;Terms&rdquo;) are an agreement between you and Aurum Vault (&ldquo;Aurum Vault&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo; or &ldquo;our&rdquo;) for the Aurum Vault apps for iPhone, iPad, Android, Windows and macOS, and this website (together, the &ldquo;Service&rdquo;). By using the Service, you agree to these Terms. If you do not agree, do not use the Service.</p>
+
+  <h2>1. What the Service does</h2>
+  <p>Aurum Vault helps you record and value precious-metal holdings that you own, using market prices, charts and tools such as the Premium Analyser. The Service is a tracking and information tool only.</p>
+
+  <h2>2. No buying, selling or trading</h2>
+  <p>You cannot buy, sell, trade, send or receive precious metals, money or any other asset through the Service. Links to outside dealers or news sites are for information only; anything you do on those sites is between you and them.</p>
+
+  <h2>3. Not financial advice</h2>
+  <p>Prices, charts, values and analysis in the Service are information only and are not financial, investment, tax or legal advice. Market prices come from third-party providers, may be delayed, and may occasionally be wrong or unavailable. Always check an independent source before making a financial decision. We are not responsible for decisions you make based on information in the Service.</p>
+
+  <h2>4. Your holdings and your account</h2>
+  <p>You are responsible for the accuracy of the holdings and other information you enter. Free and Premium keep your holdings on your device. Platinum includes sync and cloud backup and needs an account; you are responsible for keeping your password safe and for activity under your account. You can export or delete your holdings in the app at any time.</p>
+
+  <h2>5. Plans, subscriptions and payment</h2>
+  <ul>
+    <li><b>Free:</b> 1 portfolio, up to 10 items, no alerts. The Free plan may show ads.</li>
+    <li><b>Premium:</b> $5.99 per month or $49.99 per year. No ads.</li>
+    <li><b>Platinum:</b> $11.99 per month or $99.99 per year. No ads. Includes sync and cloud backup.</li>
+    <li><b>Premium Lifetime:</b> $99 one-time payment.</li>
+    <li><b>Platinum Lifetime:</b> $199 one-time payment.</li>
+  </ul>
+  <p>Subscriptions begin with a 7-day free trial. Payment is charged to your Apple Account when you confirm the purchase. Subscriptions renew automatically at the price shown unless you cancel at least 24 hours before the end of the current period. You can manage or cancel a subscription at any time in your App Store account settings; deleting the app does not cancel a subscription. Lifetime purchases are one-time payments and do not renew. Refunds are handled by Apple under its own policies.</p>
+
+  <h2>6. Acceptable use</h2>
+  <p>You agree not to misuse the Service, including trying to break its security, copying it except as the law allows, or using it for anything unlawful.</p>
+
+  <h2>7. Availability and changes</h2>
+  <p>We may change, suspend or stop parts of the Service, and we may update these Terms. When we make a significant change to these Terms, we will change the effective date at the top of this page and let you know in the app. Continuing to use the Service after a change means you accept the updated Terms.</p>
+
+  <h2>8. No warranty</h2>
+  <p>The Service is provided &ldquo;as is&rdquo; and &ldquo;as available&rdquo;. To the fullest extent allowed by law, we make no warranties that it will be uninterrupted, error-free, or that prices or other data will be accurate or complete.</p>
+
+  <h2>9. Limitation of liability</h2>
+  <p>To the fullest extent allowed by law, Aurum Vault will not be liable for indirect or consequential losses, or for losses arising from decisions you make using information in the Service. Nothing in these Terms limits liability that cannot be limited by law.</p>
+
+  <h2>10. Governing law</h2>
+  <p>These Terms are governed by the laws of the State of Tennessee, United States, without regard to its conflict-of-law rules.</p>
+
+  <h2>11. Contact us</h2>
+  <p>If you have any questions about these Terms, email us at <a href="mailto:support@aurumvault.info">support@aurumvault.info</a>.</p>
+</main>
+
+<footer>
+  <div class="wrap">
     <span>&copy; 2026 Aurum Vault</span>
-    <span class="foot-links">
-      <a href="mailto:support@aurumvault.info">support@aurumvault.info</a>
-      <a href="privacy.html">Privacy Policy</a>
-      <a href="terms.html">Terms of Use</a>
-    </span>
-  </footer>
-</div>
+    <span>Contact: <a href="mailto:support@aurumvault.info">support@aurumvault.info</a></span>
+  </div>
+</footer>
 </body>
 </html>
